@@ -1,0 +1,48 @@
+[debug] [2026-03-29T07:15:05.181Z] ----------------------------------------------------------------------
+[debug] [2026-03-29T07:15:05.182Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Anu Eban\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2026-03-29T07:15:05.183Z] CLI Version:   15.12.0
+[debug] [2026-03-29T07:15:05.183Z] Platform:      win32
+[debug] [2026-03-29T07:15:05.183Z] Node Version:  v24.14.0
+[debug] [2026-03-29T07:15:05.183Z] Time:          Sun Mar 29 2026 15:15:05 GMT+0800 (Ulaanbaatar Standard Time)
+[debug] [2026-03-29T07:15:05.183Z] ----------------------------------------------------------------------
+[debug] 
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\Anu Eban\Desktop\rcodde\med-web-admin
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] 
+[debug] [2026-03-29T07:18:04.519Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-03-29T07:18:04.520Z] > authorizing via signed-in user (anudari.enkhbat049@gmail.com)
+[debug] [2026-03-29T07:18:04.521Z] Checked if tokens are valid: true, expires at: 1774772075510
+[debug] [2026-03-29T07:18:04.521Z] Checked if tokens are valid: true, expires at: 1774772075510
+[debug] [2026-03-29T07:18:04.522Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=100
+[debug] [2026-03-29T07:18:05.332Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2026-03-29T07:18:05.333Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[info] 
+=== Firestore Setup
+[info] i  firestore: ensuring required API firestore.googleapis.com is enabled... 
+[debug] [2026-03-29T07:18:08.166Z] Checked if tokens are valid: true, expires at: 1774772075510
+[debug] [2026-03-29T07:18:08.166Z] Checked if tokens are valid: true, expires at: 1774772075510
+[debug] [2026-03-29T07:18:08.166Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/test-e4960/services/firestore.googleapis.com [none]
+[debug] [2026-03-29T07:18:08.166Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/test-e4960/services/firestore.googleapis.com  x-goog-user-project=test-e4960
+[debug] [2026-03-29T07:18:09.841Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/test-e4960/services/firestore.googleapis.com 200
+[debug] [2026-03-29T07:18:09.841Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/test-e4960/services/firestore.googleapis.com [omitted]
+[warn] !  firestore: missing required API firestore.googleapis.com. Enabling now... 
+[debug] [2026-03-29T07:18:09.841Z] Checked if tokens are valid: true, expires at: 1774772075510
+[debug] [2026-03-29T07:18:09.841Z] Checked if tokens are valid: true, expires at: 1774772075510
+[debug] [2026-03-29T07:18:09.841Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1/projects/test-e4960/services/firestore.googleapis.com:enable [none]
+[debug] [2026-03-29T07:18:09.841Z] >>> [apiv2][(partial)header] POST https://serviceusage.googleapis.com/v1/projects/test-e4960/services/firestore.googleapis.com:enable  x-goog-user-project=test-e4960
+[debug] [2026-03-29T07:18:11.138Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1/projects/test-e4960/services/firestore.googleapis.com:enable 200
+[debug] [2026-03-29T07:18:11.138Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1/projects/test-e4960/services/firestore.googleapis.com:enable [omitted]
