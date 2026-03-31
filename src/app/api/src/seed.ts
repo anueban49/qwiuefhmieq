@@ -6,10 +6,26 @@ import {
   TOP_LEVEL_PILLARS 
 } from "../../lib/mockData";
 
+async function clearCollection(collectionName: string) {
+  const snapshot = await db.collection(collectionName).get();
+  const batch = db.batch();
+  snapshot.docs.forEach((doc) => {
+    batch.delete(doc.ref);
+  });
+  await batch.commit();
+}
+
 async function seedDatabase() {
   console.log("🚀 Starting database seeding...");
 
   try {
+    // 0. Clear old data
+    console.log("🧹 Clearing old data...");
+    await clearCollection("categories");
+    await clearCollection("instruments");
+    await clearCollection("reagents");
+    await clearCollection("pillars");
+
     // 1. Seed Categories
     console.log("📂 Seeding categories...");
     const categoryPromises = TG_CATEGORIES.map(cat => 

@@ -1,5 +1,5 @@
 "use client";
 
 export default function Page() {
-  return <>isefuw</>;
+  return <>Inventory Management</>;
 }

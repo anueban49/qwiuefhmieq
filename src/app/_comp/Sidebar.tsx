@@ -10,19 +10,20 @@ import {
   Moon,
   Eclipse,
 } from "lucide-react";
-
+import { useContent } from "./context/ContentProvider";
+import { ActiveBtn } from "./context/ContentProvider";
 // Define your nav items in one place — easy to add more later
-const navItems = [
-  { icon: Newspaper, label: "Regeant", action: "regeant" },
-  { icon: TestTubes, label: "Instrument", action: "instrument" },
-  { icon: ChartBarStackedIcon, label: "Category", action: "category" },
-  { icon: Monitor, label: "Web", action: "webcontent" },
+const navItems: { icon: React.ElementType; label: string; action: ActiveBtn }[] = [
+  { icon: Newspaper, label: "Inventory", action: "Products" },
+  { icon: Monitor, label: "Web", action: "Web" },
+  { icon: ChartBarStackedIcon, label: "Dashboard", action: "Dashboard" },
 ];
 
 export function Sidebar() {
   const [open, setOpen] = useState(false);
   const { toggleTheme, theme } = useTheme();
   const router = useRouter();
+  const { switchContent, active } = useContent();
 
   const handleClick = (action: string) => {
     if (action === "theme") return toggleTheme();
@@ -31,9 +32,9 @@ export function Sidebar() {
 
   return (
     <div
-      className={`h-screen  flex flex-col gap-2 overflow-hidden p-2
+      className={`h-screen flex flex-col gap-2 overflow-hidden px-2 py-5
         transition-all duration-300 ease-in-out shadow-md
-        ${open ? "w-48" : "w-10"} ${theme === "dark" ? "bg-zinc-700 shadow-black" : "bg-gray-200 shadow-zinc-400"}`}
+        ${open ? "w-48" : "w-12"} ${theme === "dark" ? "bg-zinc-700 shadow-black" : "bg-gray-200 shadow-zinc-400"}`}
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
@@ -50,8 +51,8 @@ export function Sidebar() {
       {navItems.map(({ icon: Icon, label, action }) => (
         <button
           key={action}
-          onClick={() => handleClick(action)}
-          className="flex items-center gap-3 w-full text-left p-1 rounded hover:bg-gray-400"
+          onClick={() => switchContent(action)}
+          className="flex items-center gap-3 w-full text-left p-1 rounded hover:bg-gray-500 ease-in-out duration-300"
         >
           <Icon size={20} className="shrink-0" />
 
