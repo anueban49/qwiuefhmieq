@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useTheme } from "./context/ThemeContext";
 import { Trash2 } from "lucide-react";
 
 const API = "http://localhost:5000/api";
@@ -11,15 +10,9 @@ export function CategoriesControl() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ name: "", type: "" });
-  const { theme } = useTheme();
-
-  const card =
-    theme === "dark"
-      ? "bg-zinc-700 shadow-black"
-      : "bg-gray-200 shadow-gray-400";
-  const input =
-    theme === "dark" ? "inset-shadow-black" : "inset-shadow-gray-300";
-  const inner = theme === "dark" ? "bg-zinc-600" : "bg-white";
+  const card = " -200 shadow-gray-400";
+  const input = "inset-shadow-gray-300";
+  const inner = "bg-white";
 
   useEffect(() => {
     fetch(`${API}/categories`)

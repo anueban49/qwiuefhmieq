@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useTheme } from "./context/ThemeContext";
-import { Image, X, Trash2, Pen, Search, Plus, Minus } from "lucide-react";
+import { Trash2, Pen, Search, Plus, Minus } from "lucide-react";
 
 const API = "http://localhost:5000/api";
 
@@ -13,12 +12,13 @@ export type Reagent = {
   methodology: string;
   packageSize: string;
 };
-
+export const card = "bg-tg-subgreen shadow-gray-400";
+export const input = "inset-shadow-gray-300";
+export const inner = "bg-white";
 export function RegeantsControl() {
   const [loading, setLoading] = useState(false);
   const [reagents, setReagents] = useState<Reagent[]>([]);
   const [dataloading, setDataloading] = useState(false);
-  const { theme } = useTheme();
   const [collapse, setCollapse] = useState(false);
 
   const [form, setForm] = useState({
@@ -29,14 +29,6 @@ export function RegeantsControl() {
     methodology: "",
     packageSize: "",
   });
-
-  const card =
-    theme === "dark"
-      ? "bg-zinc-700 shadow-black"
-      : "bg-gray-200 shadow-gray-400";
-  const input =
-    theme === "dark" ? "inset-shadow-black" : "inset-shadow-gray-300";
-  const inner = theme === "dark" ? "bg-zinc-600" : "bg-white";
 
   useEffect(() => {
     setDataloading(true);
@@ -104,9 +96,7 @@ export function RegeantsControl() {
         </h2>
         <div className="flex items-center gap-2 ease-in-out duration-300">
           <input placeholder="Search" className="p-2 rounded" />
-          <button
-            className={`p-2 aspect-square rounded-full shadow-sm ${theme === "dark" ? "hover:shadow-zinc-900" : "hover:shadow-zinc-300"}`}
-          >
+          <button className="p-2 aspect-square rounded-full shadow-sm hover:shadow-zinc-300">
             <Search size={16} />
           </button>
         </div>
@@ -121,7 +111,7 @@ export function RegeantsControl() {
           {reagents.length > 0 && (
             <div className={`${card}`}>
               <div
-                className={`w-full px-8 grid grid-cols-10 p-2 rounded text-bold  z-99 shadow-sm ${inner} ${theme === "dark" ? "shadow-black" : "shadow-zinc-300"}`}
+                className={`w-full px-8 grid grid-cols-10 p-2 rounded text-bold z-99 shadow-sm shadow-zinc-300 ${inner}`}
               >
                 <div className="col-span-3 ">Title</div>
                 <div className="col-span-2 ">Catalog Number</div>
@@ -223,7 +213,7 @@ export function RegeantsControl() {
           <>
             <div
               onClick={() => setCollapse(true)}
-              className={`h-16 ease-in-out duration-500 w-full rounded flex justify-between py-2 px-5 shadow-md ${card}`}
+              className={`h-16 ease-in-out duration-500 w-full rounded flex justify-between items-center py-2 px-5 shadow-md ${card}`}
             >
               <h2 className="font-bold">Add Reagent</h2>
               <button>

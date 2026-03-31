@@ -1,9 +1,8 @@
 "use client";
-import { ChevronRight, Eclipse, Moon } from "lucide-react";
-import { useTheme } from "./_comp/context/ThemeContext";
+import { ChevronRight, ShieldCog } from "lucide-react";
 import { useState } from "react";
+import { Shield } from "lucide-react";
 export default function Page() {
-  const { theme, toggleTheme } = useTheme();
   const [loading, setLoading] = useState(false);
   const [btndisabled, setBtndisabled] = useState(true);
   const [form, setForm] = useState({
@@ -24,47 +23,31 @@ export default function Page() {
   };
 
   return (
-    <div
-      className={` ${theme === "dark" ? "bg-zinc-700" : "bg-gray-100"} w-full h-screen  flex flex-col justify-center items-center transition-all duration-300`}
-    >
-      <div
-        className={`flex flex-col w-fit h-fit gap-3 rounded-xl shadow-sm p-5 ${theme === "dark" ? "shadow-black" : "shadow-gray-300"}`}
-      >
-        <div className={`flex gap-2 justify-between items-center`}>
-          <div className="flex gap-2 items-center">
-            <img src="/icon.ico" className={`max-w-5 aspect-square max-h-5`} />
-            <p className={`text-2xl font-bold text-green-500`}>
-              Admin Interface
-            </p>
+    <div className="bg-tg-green w-full h-screen flex flex-col justify-center items-center transition-all duration-300">
+      <div className="flex flex-col w-fit h-fit gap-3 rounded-xl bg-white p-5">
+        <div className="w-full h-fit flex flex-col gap-3 items-center">
+          {" "}
+          <div className="flex justify-center bg-tg-green/10 items-center rounded-md aspect-square p-2 w-12">
+            <ShieldCog color={"#00A89F"} size={30} strokeWidth={1.5} />
           </div>
-          <button
-            onClick={() => {
-              toggleTheme();
-            }}
-            className={`rounded-full aspect-square p-2 shadow-sm ${theme === "dark" ? "shadow-black" : "shadow-zinc-300"}`}
-          >
-            {theme === "dark" ? <Eclipse /> : <Moon />}
-          </button>
-        </div>
-        <div className={``}>
-          <h1 className={`text-2xl font-bold `}>Welcome back!</h1>
-          <p className={`text-zinc-500`}>
+          <p className="text-tg-green text-2xl font-bold">BioSystems Admin</p>
+          <p className="text-zinc-500">
             Log in to access to gain access to webpage control
           </p>
         </div>
 
-        <div
-          className={`w-full flex flex-col gap-3 rounded-xl p-5 ${theme === "dark" ? "shadow-black" : "shadow-gray-300"}`}
-        >
-          <form className={`flex flex-col gap-3`} onSubmit={handleClick}>
+        <div className="w-full flex flex-col gap-3 rounded-xl p-5 shadow-gray-300">
+          <form className="flex flex-col gap-3" onSubmit={handleClick}>
+            <label>Email Address</label>
             <input
-              className={`inset-shadow-xs  px-2 py-1 rounded ${theme === "dark" ? "bg-zinc-600 inset-shadow-black" : "bg-zinc-300 inset-shadow-zinc-500"}`}
+              className=" px-2 py-1 rounded border-tg-green border"
               placeholder="email"
               value={form.id}
               onChange={(e) => setForm({ ...form, id: e.target.value })}
             />
+            <label>Password</label>
             <input
-              className={`inset-shadow-xs px-2 py-1 rounded ${theme === "dark" ? "bg-zinc-600 inset-shadow-black" : "bg-zinc-300 inset-shadow-zinc-500"}`}
+              className=" px-2 py-1 rounded border-tg-green border "
               placeholder="password"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
@@ -72,7 +55,7 @@ export default function Page() {
             <button
               type="submit"
               disabled={loading}
-              className={`rounded-2xl p-2 flex gap-2 items-center justify-center ${theme === "dark" ? "bg-zinc-400 " : "bg-gray-200"}`}
+              className="rounded-2xl p-2 flex gap-2 items-center justify-center bg-tg-green text-white ease-in-out duration-300 hover:bg-tg-green-light"
             >
               Proceed <ChevronRight />
             </button>

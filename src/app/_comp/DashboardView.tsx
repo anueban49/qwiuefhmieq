@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useTheme } from "./context/ThemeContext";
 import { TestTubes, FlaskConical, Tag, LayoutTemplate } from "lucide-react";
 
 const API = "http://localhost:5000/api";
@@ -10,15 +9,11 @@ type Pillar = { id: string; title: string; description?: string };
 type StatCard = { label: string; count: number; icon: React.ElementType };
 
 export function DashboardView() {
-  const { theme } = useTheme();
   const [stats, setStats] = useState({ instruments: 0, reagents: 0, categories: 0 });
   const [pillars, setPillars] = useState<Pillar[]>([]);
 
-  const card =
-    theme === "dark"
-      ? "bg-zinc-700 shadow-black"
-      : "bg-gray-200 shadow-gray-400";
-  const inner = theme === "dark" ? "bg-zinc-600" : "bg-white";
+  const card = "bg-tg-subgreen shadow-gray-400";
+  const inner = "bg-white";
 
   useEffect(() => {
     Promise.all([
