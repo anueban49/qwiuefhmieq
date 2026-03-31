@@ -6,6 +6,7 @@ import { InventoryManagement } from "../_comp/InventoryManagement";
 import { Sidebar } from "../_comp/Sidebar";
 import { useContent } from "../_comp/context/ContentProvider";
 
+import { signInWithCredential } from "firebase/auth";
 export default function Page() {
   const { active } = useContent();
 
