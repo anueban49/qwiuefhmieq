@@ -1,7 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Trash2, Pen, Search, Plus, Minus } from "lucide-react";
-
+import { Search, Filter } from "lucide-react";
+import { ReagentsListItem } from "../ReagentsListItem";
+import AddReagent from "../AddReagent";
 const API = "http://localhost:5000/api";
 
 export type Reagent = {
@@ -16,19 +17,8 @@ export const card = " shadow-gray-400";
 export const input = "inset-shadow-gray-300";
 export const inner = "bg-white";
 export function ReagentsControl() {
-  const [loading, setLoading] = useState(false);
   const [reagents, setReagents] = useState<Reagent[]>([]);
   const [dataloading, setDataloading] = useState(false);
-  const [collapse, setCollapse] = useState(false);
-
-  const [form, setForm] = useState({
-    catalogNo: "",
-    categoryId: "",
-    name: "",
-    id: "",
-    methodology: "",
-    packageSize: "",
-  });
 
   useEffect(() => {
     setDataloading(true);
@@ -38,33 +28,6 @@ export function ReagentsControl() {
       .catch(console.error)
       .finally(() => setDataloading(false));
   }, []);
-  console.log("dataloading", dataloading);
-
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    try {
-      setLoading(true);
-      const res = await fetch(`${API}/reagents`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      const created = await res.json();
-      setReagents((prev) => [...prev, created]);
-      setForm({
-        catalogNo: "",
-        categoryId: "",
-        name: "",
-        id: "",
-        methodology: "",
-        packageSize: "",
-      });
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleDelete = async (id: string) => {
     try {
@@ -75,23 +38,10 @@ export function ReagentsControl() {
     }
   };
 
-  const formFields = [
-    { key: "catalogNo", label: "Catalog No", type: "text" },
-    { key: "categoryId", label: "Category", type: "text" },
-    { key: "name", label: "Name", type: "text" },
-    { key: "id", label: "id", type: "text" },
-    { key: "methodology", label: "Methology", type: "text" },
-    { key: "packageSize", label: "Package Size", type: "text" },
-  ];
-
-  const handleChange = (key: string, value: string) => {
-    setForm((prev) => ({ ...prev, [key]: value }));
-  };
-
   return (
     <div className="flex flex-col gap-4 w-full">
       <div className={`flex justify-between p-2`}>
-        <h2 className="text-sm font-semibold  p-3">
+        <h2 className="text-xl font-semibold p-3">
           Reagents ({reagents.length})
         </h2>
         <div className="flex items-center gap-2 ease-in-out duration-300">
@@ -99,6 +49,7 @@ export function ReagentsControl() {
           <button className="p-2 aspect-square rounded-full shadow-sm hover:shadow-zinc-300">
             <Search size={16} />
           </button>
+          <AddReagent />
         </div>
       </div>
 
@@ -108,46 +59,32 @@ export function ReagentsControl() {
         </div>
       ) : (
         <>
+          <div className="w-full flex items-end">
+            <button
+              onClick={() => {}}
+              className="flex gap-2 items-center justify-center text-sm ease-in-out duration-300 rounded-full p-2 aspect-square"
+            >
+              <Filter size={16} />
+            </button>
+          </div>
           {reagents.length > 0 && (
             <div className={`${card}`}>
               <div
-                className={`w-full px-8 grid grid-cols-10 p-2 rounded text-bold z-99 shadow-sm shadow-zinc-300 ${inner}`}
+                className={`w-full px-8 grid grid-cols-13 p-2 font-semibold text-tg-blue-dark rounded text-bold z-99 shadow-sm shadow-zinc-300 ${inner}`}
               >
-                <div className="col-span-3 ">Title</div>
-                <div className="col-span-2 ">Catalog Number</div>
-                <div className="col-span-3 ">Methodology</div>
-                <div className="col-span-2 ">Package Size</div>
+                <div className="col-span-3">Name</div>
+                <div className="col-span-2">Category</div>
+                <div className="col-span-2">Catalog No.</div>
+                <div className="col-span-3">Methodology</div>
+                <div className="col-span-2">Package Size</div>
+                <div className="col-span-1 w-full h-full flex justify-end">
+                  Actions
+                </div>
               </div>
-              <div
-                className={`p-4 rounded shadow-md max-h-[50vh] overflow-y-scroll`}
-              >
+              <div className="p-4 rounded shadow-md max-h-[50vh] overflow-y-scroll">
                 <div className="flex flex-col gap-2">
-                  {reagents.map((reagent) => (
-                    <div
-                      key={reagent.id}
-                      className={`grid grid-cols-10 p-2 rounded ${inner}`}
-                    >
-                      <div className="col-span-3 flex items-center gap-3 min-w-1/3">
-                        <div>
-                          <p className="font-medium text-sm">{reagent.name}</p>
-                          <p className="text-xs opacity-60">ID: {reagent.id}</p>
-                        </div>
-                      </div>
-                      <div className="col-span-2">{reagent.catalogNo}</div>
-                      <div className="col-span-3">{reagent.methodology}</div>
-                      <div>{reagent.packageSize}</div>
-                      <div className="w-full flex justify-end">
-                        <button
-                          onClick={() => handleDelete(reagent.id)}
-                          className="p-1 rounded hover:bg-red-500 hover:text-white transition-colors duration-200"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                        <button className="p-1 rounded hover:bg-red-500 hover:text-white transition-colors duration-200">
-                          <Pen size={16} />
-                        </button>
-                      </div>
-                    </div>
+                  {reagents.map((reagent, i) => (
+                    <ReagentsListItem key={i} prop={reagent} />
                   ))}
                 </div>
               </div>
@@ -155,74 +92,6 @@ export function ReagentsControl() {
           )}
         </>
       )}
-      <div className={`ease-in-out duration-500`}>
-        {collapse ? (
-          <div
-            className={`h-fit px-5 py-2 flex flex-col gap-2 rounded shadow-md ease-in-out duration-500 ${card}`}
-          >
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="flex justify-between items-center ">
-                <h1 className="font-semibold">Add Reagent</h1>
-                <button
-                  onClick={() => {
-                    setCollapse(false);
-                  }}
-                >
-                  <Minus />
-                </button>
-              </div>
-
-              {formFields.map((field) => (
-                <div key={field.key}>
-                  <label className="text-sm font-medium">{field.label}</label>
-                  <input
-                    required
-                    type={field.type}
-                    className={`inset-shadow-2xs mt-1 w-full rounded-md px-3 py-2 bg-background ${input}`}
-                    value={form[field.key as keyof typeof form]}
-                    onChange={(e) => handleChange(field.key, e.target.value)}
-                  />
-                </div>
-              ))}
-              <div>
-                <label className="text-sm font-medium">Category</label>
-                <select
-                  required
-                  className="mt-1 w-full rounded-md px-3 py-2 bg-background cursor-pointer focus:outline-none"
-                  value={form.categoryId}
-                  onChange={(e) =>
-                    setForm({ ...form, categoryId: e.target.value })
-                  }
-                >
-                  <option value="">Select Category</option>
-                  <option value="instrument">Instrument</option>
-                  <option value="reagent">Reagent</option>
-                </select>
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className={`w-full rounded-md px-4 py-2 font-medium shadow-sm hover:shadow-none ease-in-out duration-300 ${card}`}
-              >
-                {loading ? "Adding..." : "Add"}
-              </button>
-            </form>
-          </div>
-        ) : (
-          <>
-            <div
-              onClick={() => setCollapse(true)}
-              className={`h-16 ease-in-out duration-500 w-full rounded flex justify-between items-center py-2 px-5 shadow-md ${card}`}
-            >
-              <h2 className="font-bold">Add Reagent</h2>
-              <button>
-                <Plus />
-              </button>
-            </div>
-          </>
-        )}
-      </div>
     </div>
   );
 }
