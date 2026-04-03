@@ -8,6 +8,7 @@ import instrumentsRouter from "./routes/instruments";
 import categoriesRouter from "./routes/categories";
 import reagentsRouter from "./routes/reagents";
 import pillarsRouter from "./routes/pillars";
+import { Access } from "./routes/access";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -16,6 +17,7 @@ app.use(cors());
 app.use(express.json());
 
 // API Routes
+app.use("/api/access", Access);
 app.use("/api/instruments", instrumentsRouter);
 app.use("/api/categories", categoriesRouter);
 app.use("/api/reagents", reagentsRouter);

@@ -5,19 +5,22 @@ import { DashboardView } from "../_comp/DashboardView";
 import { InventoryManagement } from "../_comp/InventoryManagement";
 import { Sidebar } from "../_comp/Sidebar";
 import { useContent } from "../_comp/context/ContentProvider";
-
-import { signInWithCredential } from "firebase/auth";
+import { SettingsPanel } from "../_comp/SettingsPanel";
+import InstrumentsControl from "../_comp/InstrumentsControl";
+import { ReagentsControl } from "../_comp/ReagentsControl";
 export default function Page() {
   const { active } = useContent();
 
   const RenderContent = () => {
     switch (active) {
-      case "Dashboard":
-        return <DashboardView />;
-      case "Products":
-        return <InventoryManagement />;
-      case "Web":
+      case "Categories":
         return <CategoriesControl />;
+      case "Instruments":
+        return <InstrumentsControl />;
+      case "Regeants":
+        return < ReagentsControl/>;
+      case "Settings":
+        return <SettingsPanel />;
       default:
         return <DashboardView />;
     }

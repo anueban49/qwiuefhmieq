@@ -1,13 +1,11 @@
 // server/routes/auth.ts (or wherever Access lives)
 import type { RequestHandler } from "express";
 import { auth, db } from "../config/firebase";
-
+import { Router } from "express";
+const router = Router();
 export const Access: RequestHandler = async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    // 1️Call Firebase REST API to sign in
-    //    (no client SDK needed on the server!) -> firebase-client dependency(?)
     const firebaseRes = await fetch(
       `${process.env.NEXT_PUBLIC_FIREBASE_ADMINLINK}/v1/accounts:signInWithPassword?key=${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}`,
       {

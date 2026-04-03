@@ -6,7 +6,7 @@ export default function Page() {
   const [loading, setLoading] = useState(false);
   const [btndisabled, setBtndisabled] = useState(true);
   const [form, setForm] = useState({
-    id: "",
+    email: "",
     password: "",
   });
 
@@ -23,7 +23,7 @@ export default function Page() {
   };
 
   return (
-    <div className="bg-tg-green w-full h-screen flex flex-col justify-center items-center transition-all duration-300">
+    <div className="bg-white w-full h-screen flex flex-col justify-center items-center transition-all duration-300">
       <div className="flex flex-col w-fit h-fit gap-3 rounded-xl bg-white p-5">
         <div className="w-full h-fit flex flex-col gap-3 items-center">
           {" "}
@@ -42,14 +42,15 @@ export default function Page() {
             <input
               className=" px-2 py-1 rounded border-tg-green border"
               placeholder="email"
-              value={form.id}
-              onChange={(e) => setForm({ ...form, id: e.target.value })}
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
             />
             <label>Password</label>
             <input
               className=" px-2 py-1 rounded border-tg-green border "
               placeholder="password"
               value={form.password}
+              type="password"
               onChange={(e) => setForm({ ...form, password: e.target.value })}
             />
             <button

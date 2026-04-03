@@ -12,10 +12,10 @@ export type Reagent = {
   methodology: string;
   packageSize: string;
 };
-export const card = "bg-tg-subgreen shadow-gray-400";
+export const card = " shadow-gray-400";
 export const input = "inset-shadow-gray-300";
 export const inner = "bg-white";
-export function RegeantsControl() {
+export function ReagentsControl() {
   const [loading, setLoading] = useState(false);
   const [reagents, setReagents] = useState<Reagent[]>([]);
   const [dataloading, setDataloading] = useState(false);
