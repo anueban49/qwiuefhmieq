@@ -1,8 +1,6 @@
 "use client";
 
 import { CategoriesControl } from "../_comp/CategoriesControl";
-import { DashboardView } from "../_comp/DashboardView";
-import { InventoryManagement } from "../_comp/InventoryManagement";
 import { Sidebar } from "../_comp/Sidebar";
 import { useContent } from "../_comp/context/ContentProvider";
 import { SettingsPanel } from "../_comp/SettingsPanel";
@@ -22,7 +20,7 @@ export default function Page() {
       case "Settings":
         return <SettingsPanel />;
       default:
-        return <DashboardView />;
+        return <CategoriesControl />;
     }
   };
 

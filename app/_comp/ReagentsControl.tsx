@@ -1,30 +1,40 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Search, Filter } from "lucide-react";
-import { ReagentsListItem } from "../ReagentsListItem";
-import AddReagent from "../AddReagent";
-const API = "http://localhost:5000/api";
+import { ReagentsListItem } from "./ReagentsListItem";
+import AddReagent from "./AddReagent";
+import { fetchWithAuth } from "@/lib/api";
+const API = process.env.NEXT_PUBLIC_BASE_URL;
+console.log(API);
 
 export type Reagent = {
   catalogNo: string;
   id: string;
   categoryId: string;
-  name: string;
-  methodology: string;
+  name_en: string;
+  name_mn?: string;
+  methodology_mn?: string;
+  methodology_en?: string;
   packageSize: string;
 };
+export type SortType = "Methodology" | "A-Z" | "Category";
 export const card = " shadow-gray-400";
 export const input = "inset-shadow-gray-300";
 export const inner = "bg-white";
 export function ReagentsControl() {
   const [reagents, setReagents] = useState<Reagent[]>([]);
   const [dataloading, setDataloading] = useState(false);
+  const [filter, setFilter] = useState("");
+  const [categories, setCategories] = useState<string[]>([]);
 
   useEffect(() => {
     setDataloading(true);
-    fetch(`${API}/reagents`)
+    fetchWithAuth(`/reagents`)
       .then((r) => r.json())
-      .then((data) => setReagents(Array.isArray(data) ? data : []))
+      .then((data) => {
+        setReagents(Array.isArray(data) ? data : []);
+        setCategories((prev) => [...prev, ...reagents.map((r) => r.categoryId)])
+      })
       .catch(console.error)
       .finally(() => setDataloading(false));
   }, []);

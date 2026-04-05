@@ -6,17 +6,29 @@ export default function Page() {
   const [loading, setLoading] = useState(false);
   const [btndisabled, setBtndisabled] = useState(true);
   const [form, setForm] = useState({
-    email: "",
+    username: "",
     password: "",
   });
-
-  const handleClick = async () => {
+  const API = process.env.NEXT_PUBLIC_BASE_URL;
+  const handleClick = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("send payload:", form);
     try {
       setBtndisabled(true);
-
       setLoading(true);
-
-      setLoading(false);
+      fetch(`${API}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(form),
+      })
+        .then((r) => r.json())
+        .then((data) =>
+          localStorage.setItem("accessToken", data.access_token as any),
+        )
+        .catch(console.error)
+        .finally(() => setLoading(false));
     } catch (e) {
       console.error(e);
     }
@@ -38,12 +50,12 @@ export default function Page() {
 
         <div className="w-full flex flex-col gap-3 rounded-xl p-5 shadow-gray-300">
           <form className="flex flex-col gap-3" onSubmit={handleClick}>
-            <label>Email Address</label>
+            <label>Username</label>
             <input
               className=" px-2 py-1 rounded border-tg-green border"
-              placeholder="email"
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              placeholder="username"
+              value={form.username}
+              onChange={(e) => setForm({ ...form, username: e.target.value })}
             />
             <label>Password</label>
             <input

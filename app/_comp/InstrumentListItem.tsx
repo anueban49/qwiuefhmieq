@@ -25,7 +25,7 @@ export type Instrument = {
 const card = "bg-tg-subgreen shadow-gray-400";
 const input = "inset-shadow-gray-300";
 const inner = "bg-white";
-const API = "http://localhost:5000/api";
+const API =  process.env.NEXT_PUBLIC_BASE_URL;
 
 export const InstrumentListItem = ({ props }: { props: Instrument }) => {
   const [expand, setExpand] = useState(false);

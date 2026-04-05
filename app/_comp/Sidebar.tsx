@@ -41,7 +41,7 @@ export function Sidebar() {
           className={`whitespace-nowrap transition-all duration-300 ease-in-out overflow-hidden
               ${open ? "w-full opacity-100" : "w-0 opacity-0"}`}
         >
-          <img src={`/BIOSYSTITLELOGO.png`} />
+          <img src={`/BIOSYSTITLE PROCESS.ENV.NEXT_PUBLIC_BASE_URL.png`} />
         </div>
       </div>
       <p

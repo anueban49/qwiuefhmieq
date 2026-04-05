@@ -41,3 +41,4 @@ yarn-error.log*
 next-env.d.ts
 src/app/api/node_modules
 src/server/node_modules
+src/server/dist/*

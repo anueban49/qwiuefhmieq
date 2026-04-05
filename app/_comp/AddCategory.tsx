@@ -53,55 +53,39 @@ function Dialog({ open, onClose, children }: DialogProps) {
 }
 
 // ─────────────────────────────────────────────────────────────
-// Reagent Form
+// Category Form
 // ─────────────────────────────────────────────────────────────
 
-interface ReagentForm {
-  catalogNo: string;
-  categoryId: string;
+interface CategoryForm {
   name: string;
-  id: string;
-  methodology: string;
-  packageSize: string;
+  type: string;
 }
 
-const emptyForm: ReagentForm = {
-  catalogNo: "",
-  categoryId: "",
+const emptyForm: CategoryForm = {
   name: "",
-  id: "",
-  methodology: "",
-  packageSize: "",
+  type: "",
 };
 
 const input =
   "border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/50";
 const card = "bg-indigo-600 text-white hover:bg-indigo-700";
 
-const formFields = [
-  { key: "catalogNo", label: "Catalog No" },
-  { key: "name", label: "Name" },
-  { key: "id", label: "ID" },
-  { key: "methodology", label: "Methodology" },
-  { key: "packageSize", label: "Package Size" },
-];
-
-interface ReagentFormDialogProps {
+interface CategoryFormDialogProps {
   open: boolean;
   onClose: () => void;
 }
 
-export function ReagentFormDialog({ open, onClose }: ReagentFormDialogProps) {
-  const [form, setForm] = useState<ReagentForm>(emptyForm);
+export function CategoryFormDialog({ open, onClose }: CategoryFormDialogProps) {
+  const [form, setForm] = useState<CategoryForm>(emptyForm);
   const [loading, setLoading] = useState(false);
 
-  const API = "http://localhost:5000/api";
+  const API =  process.env.NEXT_PUBLIC_BASE_URL;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch(`${API}/reagents`, {
+      const res = await fetch(`${API}/categories`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -121,7 +105,7 @@ export function ReagentFormDialog({ open, onClose }: ReagentFormDialogProps) {
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Header */}
         <div className="flex justify-between items-center">
-          <h1 className="font-semibold text-gray-900">Add Reagent</h1>
+          <h1 className="font-semibold text-gray-900">Add Category</h1>
           <button
             type="button"
             onClick={onClose}
@@ -131,34 +115,32 @@ export function ReagentFormDialog({ open, onClose }: ReagentFormDialogProps) {
           </button>
         </div>
 
-        {/* Basic fields */}
-        {formFields.map(({ key, label }) => (
-          <div key={key}>
-            <label className="text-sm font-medium text-gray-700">{label}</label>
-            <input
-              required
-              type="text"
-              className={`mt-1 w-full rounded-md px-3 py-2 bg-white ${input}`}
-              value={form[key as keyof ReagentForm]}
-              onChange={(e) =>
-                setForm((prev) => ({ ...prev, [key]: e.target.value }))
-              }
-            />
-          </div>
-        ))}
-
-        {/* Category */}
+        {/* Name */}
         <div>
-          <label className="text-sm font-medium text-gray-700">Category</label>
+          <label className="text-sm font-medium text-gray-700">Name</label>
+          <input
+            required
+            type="text"
+            className={`mt-1 w-full rounded-md px-3 py-2 bg-white ${input}`}
+            value={form.name}
+            onChange={(e) =>
+              setForm((prev) => ({ ...prev, name: e.target.value }))
+            }
+          />
+        </div>
+
+        {/* Type */}
+        <div>
+          <label className="text-sm font-medium text-gray-700">Type</label>
           <select
             required
             className={`mt-1 w-full rounded-md px-3 py-2 bg-white cursor-pointer ${input}`}
-            value={form.categoryId}
+            value={form.type}
             onChange={(e) =>
-              setForm((prev) => ({ ...prev, categoryId: e.target.value }))
+              setForm((prev) => ({ ...prev, type: e.target.value }))
             }
           >
-            <option value="">Select Category</option>
+            <option value="">Select Type</option>
             <option value="instrument">Instrument</option>
             <option value="reagent">Reagent</option>
           </select>
@@ -170,14 +152,14 @@ export function ReagentFormDialog({ open, onClose }: ReagentFormDialogProps) {
           disabled={loading}
           className={`w-full rounded-md px-4 py-2.5 font-medium transition-all disabled:opacity-50 ${card}`}
         >
-          {loading ? "Adding..." : "Add Reagent"}
+          {loading ? "Adding..." : "Add Category"}
         </button>
       </form>
     </Dialog>
   );
 }
 
-export default function AddReagent() {
+export default function AddCategory() {
   const [open, setOpen] = useState(false);
 
   return (
@@ -186,10 +168,10 @@ export default function AddReagent() {
         onClick={() => setOpen(true)}
         className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg shadow-lg transition-all"
       >
-        Add Reagent
+        Add Category
       </button>
 
-      <ReagentFormDialog open={open} onClose={() => setOpen(false)} />
+      <CategoryFormDialog open={open} onClose={() => setOpen(false)} />
     </div>
   );
 }

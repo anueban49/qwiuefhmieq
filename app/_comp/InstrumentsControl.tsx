@@ -2,8 +2,9 @@
 import { useState, useEffect } from "react";
 import { Image, X, Search, Plus, Minus, Filter } from "lucide-react";
 import { InstrumentListItem } from "./InstrumentListItem";
-const API = "http://localhost:5000/api";
-import AddInstrument from "../AddInstrument";
+const API = process.env.NEXT_PUBLIC_BASE_URL;
+import AddInstrument from "./AddInstrument";
+import { fetchWithAuth } from "@/lib/api";
 type Feature = { title: string; description: string };
 type Spec = { parameter: string; value: string };
 
@@ -44,7 +45,7 @@ const InstrumentsControl = () => {
 
   useEffect(() => {
     setDataloading(true);
-    fetch(`${API}/instruments`)
+    fetchWithAuth(`/instruments`)
       .then((r) => r.json())
       .then((data) => setInstruments(Array.isArray(data) ? data : []))
       .catch(console.error)
@@ -55,9 +56,8 @@ const InstrumentsControl = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await fetch(`${API}/instruments`, {
+      const res = await fetchWithAuth(`/instruments`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...form, imageUrl: preview || form.imageUrl }),
       });
       const created = await res.json();
@@ -73,7 +73,7 @@ const InstrumentsControl = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      await fetch(`${API}/instruments/${id}`, { method: "DELETE" });
+      await fetchWithAuth(`/instruments/${id}`, { method: "DELETE" });
       setInstruments((prev) => prev.filter((i) => i.id !== id));
     } catch (e) {
       console.error(e);

@@ -1,15 +1,41 @@
 "use client";
-import { useState, createContext, useContext, ReactNode } from "react";
+import {
+  useState,
+  createContext,
+  useContext,
+  ReactNode,
+  useEffect,
+} from "react";
+import { useRouter } from "next/navigation";
 export type ActiveBtn = "Categories" | "Instruments" | "Regeants" | "Settings";
 interface ContentType {
   switchContent: (tab: ActiveBtn) => void;
   active: "Categories" | "Instruments" | "Regeants" | "Settings";
 }
+export type UserType = {
+  displayName: string;
+  id: string;
+  username: string;
+};
 const ContentContext = createContext({} as ContentType);
 
 export const ContentProvider = ({ children }: { children: ReactNode }) => {
+  const router = useRouter();
   const [active, setActive] = useState<ActiveBtn>("Categories");
-
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const token = localStorage.getItem("accessToken");
+        if (!token) {
+          router.push("/");
+        }
+        router.push("/main")
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getUser();
+  }, []);
   const switchContent = (tab: ActiveBtn) => {
     setActive(tab);
     console.log(active);
