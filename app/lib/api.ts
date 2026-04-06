@@ -10,7 +10,7 @@ export async function fetchWithAuth(
     ...options,
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,  // ← Always attached!
+      "Authorization": `Bearer ${token}`, 
       ...options.headers,
     },
   });

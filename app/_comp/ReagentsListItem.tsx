@@ -2,7 +2,6 @@
 import { Trash2, Pen } from "lucide-react";
 import { Reagent } from "./ReagentsControl";
 import { fetchWithAuth } from "@/lib/api";
-const API = process.env.NEXT_PUBLIC_BASE_URL;
 export const card = " shadow-gray-400";
 export const input = "inset-shadow-gray-300";
 export const inner = "bg-white";

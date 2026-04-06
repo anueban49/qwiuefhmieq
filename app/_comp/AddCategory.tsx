@@ -1,4 +1,5 @@
 "use client";
+import { fetchWithAuth } from "@/lib/api";
 import { Minus } from "lucide-react";
 import { useRef, useEffect, useState, ReactNode, MouseEvent } from "react";
 
@@ -52,9 +53,6 @@ function Dialog({ open, onClose, children }: DialogProps) {
   );
 }
 
-// ─────────────────────────────────────────────────────────────
-// Category Form
-// ─────────────────────────────────────────────────────────────
 
 interface CategoryForm {
   name: string;
@@ -66,9 +64,9 @@ const emptyForm: CategoryForm = {
   type: "",
 };
 
-const input =
+export const input =
   "border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/50";
-const card = "bg-indigo-600 text-white hover:bg-indigo-700";
+export const card = "px-6 py-3 bg-tg-green hover:bg-tg-blue text-white font-medium rounded-lg shadow-lg transition-all duration-300";
 
 interface CategoryFormDialogProps {
   open: boolean;
@@ -79,15 +77,13 @@ export function CategoryFormDialog({ open, onClose }: CategoryFormDialogProps) {
   const [form, setForm] = useState<CategoryForm>(emptyForm);
   const [loading, setLoading] = useState(false);
 
-  const API =  process.env.NEXT_PUBLIC_BASE_URL;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch(`${API}/categories`, {
+      const res = await fetchWithAuth(`/categories`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
       await res.json();
@@ -150,7 +146,7 @@ export function CategoryFormDialog({ open, onClose }: CategoryFormDialogProps) {
         <button
           type="submit"
           disabled={loading}
-          className={`w-full rounded-md px-4 py-2.5 font-medium transition-all disabled:opacity-50 ${card}`}
+          className={`w-full rounded-md font-medium disabled:opacity-50 ${card}`}
         >
           {loading ? "Adding..." : "Add Category"}
         </button>
@@ -166,7 +162,7 @@ export default function AddCategory() {
     <div>
       <button
         onClick={() => setOpen(true)}
-        className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg shadow-lg transition-all"
+        className="px-6 py-3 bg-tg-green hover:bg-tg-blue text-white font-medium rounded-lg shadow-lg transition-all duration-300"
       >
         Add Category
       </button>

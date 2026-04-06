@@ -7,28 +7,24 @@ import {
   Pen,
   ChevronRight,
   ChevronDown,
+  Globe2Icon,
+  Image,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 export type Feature = { title: string; description: string };
 export type Spec = { parameter: string; value: string };
-export type Instrument = {
-  id: string;
-  categoryId: string;
-  methodTag: string;
-  name: string;
-  description: string;
-  imageUrl: string;
-  fullDescription: string;
-  features: Feature[];
-  specs: Spec[];
-};
+import { Instrument } from "./InstrumentsControl";
 const card = "bg-tg-subgreen shadow-gray-400";
 const input = "inset-shadow-gray-300";
 const inner = "bg-white";
-const API =  process.env.NEXT_PUBLIC_BASE_URL;
-
+const API = process.env.NEXT_PUBLIC_BASE_URL;
+export type LangType = "EN" | "MN";
 export const InstrumentListItem = ({ props }: { props: Instrument }) => {
+  const [lang, setLang] = useState("EN");
   const [expand, setExpand] = useState(false);
+  const switchLang = () => {
+    setLang((prev) => (prev === "EN" ? "MN" : "EN"));
+  };
   const handleDelete = async (id: string) => {
     try {
       await fetch(`${API}/instruments/${id}`, { method: "DELETE" });
@@ -46,11 +42,14 @@ export const InstrumentListItem = ({ props }: { props: Instrument }) => {
           <div className="col-span-1 flex items-center gap-3">
             <p className="font-medium text-sm">{props.id}</p>
           </div>
-          <div className="col-span-2 flex items-center text-sm">
-            {props.name}
+          <div className="col-span-2 flex justify-center text-sm flex-col gap-2">
+            <p>{props.name_en}</p>
+            <p>{props.name_mn}</p>
           </div>
           <div className="col-span-2 flex items-center text-sm">
-            {props.categoryId}
+            <p className="rounded-xl px-2 py-1 bg-green-100 text-green-800 text-sm font-bold ">
+              {props.categoryId}
+            </p>
           </div>
           <div className="col-span-1 flex items-center text-sm">
             {props.methodTag}
@@ -79,32 +78,81 @@ export const InstrumentListItem = ({ props }: { props: Instrument }) => {
         </div>
         {expand && (
           <>
-            <div className="flex gap-2 p-2">
-              <img
-                src={props.imageUrl}
-                alt={props.name}
-                className="rounded w-1/4 aspect-square bg-white shadow-xs shadow-tg-subgreen"
-              />
-              <div className="w-3/8 flex flex-col text-sm rounded bg-white p-2 shadow-xs shadow-tg-subgreen ">
-                <p className="font-bold">Features</p>
-                {props?.features.map((f, i) => (
-                  <div className="w-full flex flex-col p-2 gap-2" key={i}>
-                    <p className="text-xs font-bold text-tg-blue">-{f.title}</p>
-                    {f.description}
+            <div className="flex gap-2 p-2 relative">
+              <button
+                onClick={() => {
+                  switchLang();
+                }}
+                className="absolute top-3 right-4 p-1 text-xs font-bold text-white bg-tg-blue-dark shrink-0 rounded-2xl w-8 aspect-square"
+              >
+                {lang === "EN" ? "MN" : "EN"}
+              </button>
+              {props.imageData ? (
+                <>
+                  <img
+                    src={props.imageData}
+                    alt={props.name_en}
+                    className="rounded w-1/4 aspect-square bg-white shadow-xs shadow-tg-subgreen"
+                  />
+                </>
+              ) : (
+                <div className="bg-blue-300/50 rounded flex justify-center items-center">
+                  <Image />
+                </div>
+              )}
+              {/*  */}
+              {lang === "EN" ? (
+                <>
+                  {" "}
+                  <div className="w-3/8 flex flex-col text-sm rounded bg-white p-2 shadow-xs shadow-tg-subgreen ">
+                    <p className="font-bold">Features</p>
+                    {props?.features_en.map((f, i) => (
+                      <div className="w-full flex flex-col p-2 gap-2" key={i}>
+                        <p className="text-xs font-bold text-tg-blue">
+                          -{f.title}
+                        </p>
+                        {f.description}
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-              <div className="w-3/8 flex flex-col text-sm rounded bg-white p-2 shadow-xs shadow-tg-subgreen">
-                <p className="font-bold">Specifications</p>
-                {props?.specs.map((s, i) => (
-                  <div key={i} className="w-full flex flex-col p-2 gap-2">
-                    <p className="text-xs font-bold text-tg-blue">
-                      -{s.parameter}
-                    </p>
-                    {s.value}
+                  <div className="w-3/8 flex flex-col text-sm rounded bg-white p-2 shadow-xs shadow-tg-subgreen">
+                    <p className="font-bold">Specifications</p>
+                    {props?.specs_en.map((s, i) => (
+                      <div key={i} className="w-full flex flex-col p-2 gap-2">
+                        <p className="text-xs font-bold text-tg-blue">
+                          -{s.parameter}
+                        </p>
+                        {s.value}
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </>
+              ) : (
+                <>
+                  <div className="w-3/8 flex flex-col text-sm rounded bg-white p-2 shadow-xs shadow-tg-subgreen ">
+                    <p className="font-bold">Features</p>
+                    {props?.features_mn?.map((f, i) => (
+                      <div className="w-full flex flex-col p-2 gap-2" key={i}>
+                        <p className="text-xs font-bold text-tg-blue">
+                          -{f.title}
+                        </p>
+                        {f.description}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="w-3/8 flex flex-col text-sm rounded bg-white p-2 shadow-xs shadow-tg-subgreen">
+                    <p className="font-bold">Specifications</p>
+                    {props?.specs_mn?.map((s, i) => (
+                      <div key={i} className="w-full flex flex-col p-2 gap-2">
+                        <p className="text-xs font-bold text-tg-blue">
+                          -{s.parameter}
+                        </p>
+                        {s.value}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </>
         )}

@@ -4,6 +4,7 @@ import { Search, Filter } from "lucide-react";
 import { ReagentsListItem } from "./ReagentsListItem";
 import AddReagent from "./AddReagent";
 import { fetchWithAuth } from "@/lib/api";
+import { Methodology } from "./AddReagent";
 const API = process.env.NEXT_PUBLIC_BASE_URL;
 console.log(API);
 
@@ -24,8 +25,9 @@ export const inner = "bg-white";
 export function ReagentsControl() {
   const [reagents, setReagents] = useState<Reagent[]>([]);
   const [dataloading, setDataloading] = useState(false);
+  const [cats, setCats] = useState<string[]>([]);
+  const [methods, setMethods] = useState<Methodology[]>([]);
   const [filter, setFilter] = useState("");
-  const [categories, setCategories] = useState<string[]>([]);
 
   useEffect(() => {
     setDataloading(true);
@@ -33,20 +35,25 @@ export function ReagentsControl() {
       .then((r) => r.json())
       .then((data) => {
         setReagents(Array.isArray(data) ? data : []);
-        setCategories((prev) => [...prev, ...reagents.map((r) => r.categoryId)])
+        setCats([
+          ...new Set<string>(
+            data
+              .map((d: Reagent) => d.categoryId?.trim()) 
+              .filter((c: string): c is string => !!c),
+          ),
+        ]);
+        setMethods([
+          ...new Set<Methodology>(
+            data.map((d: Reagent) => ({
+              methodology_en: d.methodology_en,
+              methodology_mn: d.methodology_mn,
+            })),
+          ),
+        ]);
       })
       .catch(console.error)
       .finally(() => setDataloading(false));
   }, []);
-
-  const handleDelete = async (id: string) => {
-    try {
-      await fetch(`${API}/reagents/${id}`, { method: "DELETE" });
-      setReagents((prev) => prev.filter((r) => r.id !== id));
-    } catch (e) {
-      console.error(e);
-    }
-  };
 
   return (
     <div className="flex flex-col gap-4 w-full">
@@ -59,7 +66,7 @@ export function ReagentsControl() {
           <button className="p-2 aspect-square rounded-full shadow-sm hover:shadow-zinc-300">
             <Search size={16} />
           </button>
-          <AddReagent />
+          <AddReagent categoryId={cats as string[]} methodology={methods} />
         </div>
       </div>
 
@@ -91,7 +98,7 @@ export function ReagentsControl() {
                   Actions
                 </div>
               </div>
-              <div className="p-4 rounded shadow-md max-h-[50vh] overflow-y-scroll">
+              <div className="p-4 rounded shadow-md max-h-fulloverflow-y-scroll">
                 <div className="flex flex-col gap-2">
                   {reagents.map((reagent, i) => (
                     <ReagentsListItem key={i} prop={reagent} />

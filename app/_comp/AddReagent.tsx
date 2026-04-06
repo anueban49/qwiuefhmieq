@@ -70,9 +70,7 @@ const emptyForm: ReagentForm = {
   packageSize: "",
 };
 
-const input =
-  "border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/50";
-const card = "bg-indigo-600 text-white hover:bg-indigo-700";
+import { card, input } from "./AddCategory";
 
 const formFields = [
   { key: "catalogNo", label: "Catalog No" },
@@ -85,22 +83,21 @@ const formFields = [
 interface ReagentFormDialogProps {
   open: boolean;
   onClose: () => void;
+  categoryId?: string[];
+  methodology?: Methodology[];
 }
 
-export function ReagentFormDialog({ open, onClose }: ReagentFormDialogProps) {
+export type Methodology = {
+  methodology_en: string;
+  methodology_mn: string;
+};
+export function ReagentFormDialog(
+  { open, onClose, categoryId, methodology }: ReagentFormDialogProps,
+) {
   const [form, setForm] = useState<ReagentForm>(emptyForm);
   const [loading, setLoading] = useState(false);
 
   const API = process.env.NEXT_PUBLIC_BASE_URL;
-
-  useEffect(() => {
-    setLoading(true);
-    fetchWithAuth(`/reagents`)
-      .then((r) => r.json())
-      .then((data) => {})
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -164,8 +161,31 @@ export function ReagentFormDialog({ open, onClose }: ReagentFormDialogProps) {
             }
           >
             <option value="">Select Category</option>
-            <option value="instrument">Instrument</option>
-            <option value="reagent">Reagent</option>
+            {categoryId?.map((c, i) => (
+              <option key={i} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="text-sm font-medium text-gray-700">
+            Methodology
+          </label>
+          <select
+            required
+            className={`mt-1 w-full rounded-md px-3 py-2 bg-white cursor-pointer ${input}`}
+            value={form.methodology_en}
+            onChange={(e) =>
+              setForm((prev) => ({ ...prev, methodology_en: e.target.value }))
+            }
+          >
+            <option value="">Select Methodology</option>
+            {methodology?.map((c, i) => (
+              <option key={i} value={c.methodology_en}>
+                {c.methodology_mn} / {c.methodology_en}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -181,20 +201,23 @@ export function ReagentFormDialog({ open, onClose }: ReagentFormDialogProps) {
     </Dialog>
   );
 }
-
-export default function AddReagent() {
+interface AddReagentProps {
+  categoryId?: string[];
+  methodology?: Methodology[];
+}
+export default function AddReagent({ categoryId, methodology }: AddReagentProps) {
   const [open, setOpen] = useState(false);
 
   return (
     <div>
       <button
         onClick={() => setOpen(true)}
-        className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg shadow-lg transition-all"
+        className="px-6 py-3 bg-tg-green hover:bg-tg-blue text-white font-medium rounded-lg shadow-lg transition-all duration-300"
       >
         Add Reagent
       </button>
 
-      <ReagentFormDialog open={open} onClose={() => setOpen(false)} />
+      <ReagentFormDialog open={open} onClose={() => setOpen(false)} categoryId={categoryId} methodology={methodology} />
     </div>
   );
 }

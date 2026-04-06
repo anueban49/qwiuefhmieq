@@ -8,27 +8,38 @@ import { fetchWithAuth } from "@/lib/api";
 type Feature = { title: string; description: string };
 type Spec = { parameter: string; value: string };
 
-type Instrument = {
+export type Instrument = {
   id: string;
   categoryId: string;
   methodTag: string;
-  name: string;
-  description: string;
-  imageUrl: string;
-  fullDescription: string;
-  features: Feature[];
-  specs: Spec[];
+  name_en: string;
+  name_mn: string;
+  description_en: string;
+  description_mn?: string;
+  imageData?: {data: number[], type: string};
+  imageMimeType?: string;
+  fullDescription_en: string;
+  fullDescription_mn?: string;
+  features_en: Feature[];
+  features_mn?: Feature[];
+  specs_mn?: Spec[];
+  specs_en: Spec[];
 };
 
 const emptyForm = {
+  id: "",
   categoryId: "",
-  methodTag: "",
-  name: "",
-  description: "",
+  name_en: "",
+  name_mn: "",
+  description_en: "",
+  description_mn: "",
   imageUrl: "",
-  fullDescription: "",
-  features: [{ title: "", description: "" }] as Feature[],
-  specs: [{ parameter: "", value: "" }] as Spec[],
+  fullDescription_en: "",
+  fullDescription_mn: "",
+  features_en: [{ title: "", description: "" }] as Feature[],
+  features_mn: [{ title: "", description: "" }] as Feature[],
+  specs_en: [{ parameter: "", value: "" }] as Spec[],
+  specs_mn: [{ parameter: "", value: "" }] as Spec[],
 };
 
 const InstrumentsControl = () => {
@@ -149,7 +160,6 @@ const InstrumentsControl = () => {
         </div>
       ) : (
         <>
-          {" "}
           <div className="w-full flex items-end">
             <button
               onClick={() => {}}
@@ -172,7 +182,7 @@ const InstrumentsControl = () => {
                   <div className="w-full flex justify-end">Actions</div>
                 </div>
               </div>
-              <div className="p-4 rounded shadow-md max-h-[50vh] overflow-y-scroll">
+              <div className="p-4 rounded shadow-md max-h-fulloverflow-y-scroll">
                 <div className="flex flex-col gap-2">
                   {instruments.map((inst, i) => (
                     <InstrumentListItem props={inst} key={i} />

@@ -1,6 +1,13 @@
 "use client";
 import { useState } from "react";
-import { Layers, Globe, Settings, Beaker, LayoutDashboard } from "lucide-react";
+import {
+  Layers,
+  Globe,
+  Settings,
+  Beaker,
+  LayoutDashboard,
+  LogOutIcon,
+} from "lucide-react";
 import { useContent } from "./context/ContentProvider";
 import { ActiveBtn } from "./context/ContentProvider";
 import { LOGO } from "./Logo";
@@ -41,7 +48,7 @@ export function Sidebar() {
           className={`whitespace-nowrap transition-all duration-300 ease-in-out overflow-hidden
               ${open ? "w-full opacity-100" : "w-0 opacity-0"}`}
         >
-          <img src={`/BIOSYSTITLE PROCESS.ENV.NEXT_PUBLIC_BASE_URL.png`} />
+          <img src={`/BIOSYSTITLELOGO.png`} />
         </div>
       </div>
       <p
@@ -79,7 +86,9 @@ export function Sidebar() {
       >
         {" "}
         <button className="p-2 rounded ">ADMIN PROFILE</button>
-        <button className="p-2 rounded">GARAH</button>
+        <button className="p-2 rounded flex items-center gap-2 font-semibold hover:bg-red-100 hover:text-red-700 duration">
+          <LogOutIcon /> Log Out{" "}
+        </button>
       </div>
     </div>
   );

@@ -12,7 +12,7 @@ type Category = {
   bullets_mn: any[];
 };
 const card = " shadow-gray-400";
-const inner = "bg-white";
+export const inner = "bg-white";
 
 export function CategoriesControl() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -77,7 +77,7 @@ export function CategoriesControl() {
                   Actions
                 </div>
               </div>
-              <div className="p-4 rounded shadow-md max-h-[50vh] overflow-y-scroll">
+              <div className="p-4 rounded shadow-md h-full overflow-y-scroll">
                 <div className="flex flex-col gap-2">
                   {categories.map((cat) => (
                     <div

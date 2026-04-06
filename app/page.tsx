@@ -2,6 +2,7 @@
 import { ChevronRight, ShieldCog } from "lucide-react";
 import { useState } from "react";
 import { Shield } from "lucide-react";
+import { fetchWithAuth } from "./lib/api";
 export default function Page() {
   const [loading, setLoading] = useState(false);
   const [btndisabled, setBtndisabled] = useState(true);
@@ -9,14 +10,13 @@ export default function Page() {
     username: "",
     password: "",
   });
-  const API = process.env.NEXT_PUBLIC_BASE_URL;
   const handleClick = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("send payload:", form);
     try {
       setBtndisabled(true);
       setLoading(true);
-      fetch(`${API}/auth/login`, {
+      fetchWithAuth(`/auth/login`, {
         method: "POST",
         headers: {
           "Content-type": "application/json",

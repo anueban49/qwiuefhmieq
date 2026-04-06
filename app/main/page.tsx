@@ -6,24 +6,22 @@ import { useContent } from "../_comp/context/ContentProvider";
 import { SettingsPanel } from "../_comp/SettingsPanel";
 import InstrumentsControl from "../_comp/InstrumentsControl";
 import { ReagentsControl } from "../_comp/ReagentsControl";
-export default function Page() {
+const RenderContent = () => {
   const { active } = useContent();
-
-  const RenderContent = () => {
-    switch (active) {
-      case "Categories":
-        return <CategoriesControl />;
-      case "Instruments":
-        return <InstrumentsControl />;
-      case "Regeants":
-        return < ReagentsControl/>;
-      case "Settings":
-        return <SettingsPanel />;
-      default:
-        return <CategoriesControl />;
-    }
-  };
-
+  switch (active) {
+    case "Categories":
+      return <CategoriesControl />;
+    case "Instruments":
+      return <InstrumentsControl />;
+    case "Regeants":
+      return <ReagentsControl />;
+    case "Settings":
+      return <SettingsPanel />;
+    default:
+      return <CategoriesControl />;
+  }
+};
+export default function Page() {
   return (
     <div className="flex gap-2 w-full h-screen">
       <Sidebar />

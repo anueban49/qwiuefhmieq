@@ -11,6 +11,8 @@ export type ActiveBtn = "Categories" | "Instruments" | "Regeants" | "Settings";
 interface ContentType {
   switchContent: (tab: ActiveBtn) => void;
   active: "Categories" | "Instruments" | "Regeants" | "Settings";
+  lang: "EN" | "MN";
+  switchLang: () => void;
 }
 export type UserType = {
   displayName: string;
@@ -22,6 +24,7 @@ const ContentContext = createContext({} as ContentType);
 export const ContentProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const [active, setActive] = useState<ActiveBtn>("Categories");
+  const [lang, setLang] = useState<"EN" | "MN">("EN");
   useEffect(() => {
     const getUser = async () => {
       try {
@@ -29,20 +32,33 @@ export const ContentProvider = ({ children }: { children: ReactNode }) => {
         if (!token) {
           router.push("/");
         }
-        router.push("/main")
+        router.push("/main");
       } catch (e) {
-        console.log(e);
+        console.log("conten provider:", e);
       }
     };
     getUser();
+    const getLang = () => {
+      const savedLang = localStorage.getItem("lang");
+      if (!savedLang) {
+        localStorage.setItem("lang", lang);
+      }
+    };
+    getLang();
   }, []);
+  const switchLang = () => {
+    setLang((prev) => (prev === "EN" ? "MN" : "EN"));
+    localStorage.setItem("lang", lang);
+  };
   const switchContent = (tab: ActiveBtn) => {
     setActive(tab);
     console.log(active);
   };
 
   return (
-    <ContentContext.Provider value={{ switchContent, active }}>
+    <ContentContext.Provider
+      value={{ switchContent, active, lang, switchLang }}
+    >
       {children}
     </ContentContext.Provider>
   );

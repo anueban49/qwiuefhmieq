@@ -86,10 +86,8 @@ const emptyForm: InstrumentForm = {
 };
 
 // Tailwind class presets (adjust to match your theme)
-const input =
-  "border border-gray-200  focus:outline-none focus:ring-2 focus:ring-indigo-500/50";
-const inner = "bg-white-50";
-const card = "bg-indigo-600 text-white hover:bg-indigo-700";
+import { card, input } from "./AddCategory";
+import { inner } from "./CategoriesControl";
 
 interface InstrumentFormDialogProps {
   open: boolean;
@@ -268,7 +266,7 @@ export function InstrumentFormDialog({
             {form.features.map((feat, i) => (
               <div
                 key={i}
-                className={`rounded-md p-2 flex flex-col gap-1 ${inner}`}
+                className={`rounded-md p-2 flex flex-col gap-1 `}
               >
                 <div className="flex justify-between items-center">
                   <span className="text-xs text-gray-400">#{i + 1}</span>
@@ -398,7 +396,7 @@ export default function AddInstrument() {
     <div>
       <button
         onClick={() => setOpen(true)}
-        className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg shadow-lg transition-all"
+        className="px-6 py-3 bg-tg-green hover:bg-tg-blue text-white font-medium rounded-lg shadow-lg transition-all duration-300"
       >
         Add Instrument
       </button>
