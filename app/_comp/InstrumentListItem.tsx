@@ -11,7 +11,7 @@ import { useData } from "./context/DataProvider";
 import { EditInstrumentDialog } from "./AddInstrument";
 export type Feature = { title: string; description: string };
 export type Spec = { parameter: string; value: string };
-import { Instrument } from "./InstrumentsControl";
+import { Instrument } from "./context/DataProvider";
 const inner = "bg-white";
 export type LangType = "EN" | "MN";
 export const InstrumentListItem = ({ props }: { props: Instrument }) => {

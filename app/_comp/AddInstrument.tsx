@@ -1,9 +1,7 @@
 "use client";
 import { Minus, Plus, X, Image as ImageIcon } from "lucide-react";
 import { useRef, useEffect, useState, ReactNode, MouseEvent } from "react";
-// ─────────────────────────────────────────────────────────────
-// Dialog Component
-// ─────────────────────────────────────────────────────────────
+import { Instrument } from "./context/DataProvider";
 
 interface DialogProps {
   open: boolean;
@@ -67,7 +65,6 @@ interface Spec {
 
 interface InstrumentForm {
   categoryId: string;
-  methodTag?: string;
   name_en: string;
   name_mn: string;
   description_en: string;
@@ -82,7 +79,6 @@ interface InstrumentForm {
 
 const emptyForm: InstrumentForm = {
   categoryId: "",
-  methodTag: "",
   name_en: "",
   name_mn: "",
   description_en: "",
@@ -215,7 +211,6 @@ export function InstrumentFormDialog({
             { key: "name_mn", label: "Name (MN)" },
             { key: "description_en", label: "Short Description (EN)" },
             { key: "description_mn", label: "Short Description (MN)" },
-            { key: "methodTag", label: "Method Tag" },
           ] as { key: keyof InstrumentForm; label: string }[]
         ).map(({ key, label }) => (
           <div key={key}>
@@ -463,7 +458,7 @@ export function InstrumentFormDialog({
 // Edit Instrument Dialog
 // ─────────────────────────────────────────────────────────────
 
-import { Instrument } from "./InstrumentsControl";
+
 
 interface EditInstrumentDialogProps {
   open: boolean;
@@ -479,7 +474,6 @@ export function EditInstrumentDialog({
   const { updateInstrument } = useData();
   const [form, setForm] = useState<InstrumentForm>({
     categoryId: instrument.categoryId,
-    methodTag: instrument.methodTag,
     name_en: instrument.name_en,
     name_mn: instrument.name_mn,
     description_en: instrument.description_en,
@@ -574,7 +568,6 @@ export function EditInstrumentDialog({
             { key: "name_mn", label: "Name (MN)" },
             { key: "description_en", label: "Short Description (EN)" },
             { key: "description_mn", label: "Short Description (MN)" },
-            { key: "methodTag", label: "Method Tag" },
           ] as { key: keyof InstrumentForm; label: string }[]
         ).map(({ key, label }) => (
           <div key={key}>

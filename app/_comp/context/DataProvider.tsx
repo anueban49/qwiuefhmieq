@@ -7,10 +7,26 @@ import {
   useState,
   ReactNode,
 } from "react";
-import { Instrument } from "../InstrumentListItem";
 import { Reagent } from "../ReagentsControl";
 import { fetchWithAuth } from "@/lib/api";
-
+export type Feature = { title: string; description: string };
+export type Spec = { parameter: string; value: string };
+export type Instrument = {
+  id: string;
+  categoryId: string;
+  name_en: string;
+  name_mn: string;
+  description_en: string;
+  description_mn?: string;
+  imageData?: { data: number[]; type: string };
+  imageMimeType?: string;
+  fullDescription_en: string;
+  fullDescription_mn?: string;
+  features_en: Feature[];
+  features_mn?: Feature[];
+  specs_mn?: Spec[];
+  specs_en: Spec[];
+};
 export type Category = {
   id: string;
   title_en: string;

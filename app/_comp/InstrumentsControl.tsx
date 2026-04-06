@@ -4,26 +4,6 @@ import { InstrumentListItem } from "./InstrumentListItem";
 import AddInstrument from "./AddInstrument";
 import { useData } from "./context/DataProvider";
 import { useContent } from "./context/ContentProvider";
-type Feature = { title: string; description: string };
-type Spec = { parameter: string; value: string };
-
-export type Instrument = {
-  id: string;
-  categoryId: string;
-  methodTag: string;
-  name_en: string;
-  name_mn: string;
-  description_en: string;
-  description_mn?: string;
-  imageData?: { data: number[]; type: string };
-  imageMimeType?: string;
-  fullDescription_en: string;
-  fullDescription_mn?: string;
-  features_en: Feature[];
-  features_mn?: Feature[];
-  specs_mn?: Spec[];
-  specs_en: Spec[];
-};
 
 export const InstrumentsControl = () => {
   const { instruments, loading: dataloading } = useData();
