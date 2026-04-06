@@ -33,14 +33,7 @@ export const InstrumentsControl = () => {
         </div>
       ) : (
         <>
-          <div className="w-full flex items-end">
-            <button
-              onClick={() => {}}
-              className=" flex gap-2 items-center justify-center text-sm ease-in-out duration-300 rounded-full p-2 aspect-square"
-            >
-              <Filter size={16} />
-            </button>
-          </div>
+          <div className="w-full flex items-end"></div>
           {instruments.length > 0 && (
             <div className={`${card}`}>
               <div
@@ -55,7 +48,6 @@ export const InstrumentsControl = () => {
                 <div className="col-span-2">
                   {lang === "EN" ? <>Category</> : <>Категори</>}
                 </div>
-
 
                 <div className="col-span-1">
                   <div className="w-full flex justify-end">

@@ -11,6 +11,7 @@ import {
 import { useContent } from "./context/ContentProvider";
 import { ActiveBtn } from "./context/ContentProvider";
 import { LOGO } from "./Logo";
+import { useRouter } from "next/navigation";
 const navItems: {
   icon: React.ElementType;
   label: string;
@@ -45,6 +46,11 @@ export function Sidebar() {
   const toggleOpen = () => {
     setOpen((prev) => !prev);
   };
+  const router = useRouter();
+  async function handleLogOut() {
+    localStorage.removeItem("accessToken");
+    router.push("/");
+  }
   return (
     <div
       className={`h-screen flex flex-col gap-2 overflow-hidden px-2 py-5
@@ -74,7 +80,7 @@ export function Sidebar() {
         onClick={() => {
           switchLang();
         }}
-        className="flex items-center gap-3 w-fit text-left p-1 rounded hover:bg--500 ease-in-out duration-300 hover:bg-tg-subgreen"
+        className="flex items-center gap-3 w-full text-left p-1 rounded hover:bg--500 ease-in-out duration-300 hover:text-tg-blue hover:bg-tg-blue/10"
       >
         <Globe size={20} className="shrink-0" />
         <div className={`${open ? "w-full opacity-100" : "w-0 opacity-0"}`}>
@@ -100,9 +106,13 @@ export function Sidebar() {
         className={`mt-auto flex flex-col gap-3 whitespace-nowrap transition-all duration-300 ease-in-out overflow-hidden
               ${open ? "w-full opacity-100" : "w-0 opacity-0"}`}
       >
-        <button className="p-2 rounded ">ADMIN PROFILE</button>
-        <button className="p-2 rounded flex items-center gap-2 font-semibold hover:bg-red-100 hover:text-red-700 duration">
-          <LogOutIcon /> Log Out{" "}
+        <button
+          onClick={() => {
+            handleLogOut();
+          }}
+          className="p-2 rounded flex items-center gap-2 font-semibold hover:bg-red-100 hover:text-red-700 duration"
+        >
+          <LogOutIcon /> Log Out
         </button>
       </div>
     </div>

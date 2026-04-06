@@ -1,5 +1,5 @@
 "use client";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Search, Filter } from "lucide-react";
 import { ReagentsListItem } from "./ReagentsListItem";
 import AddReagent from "./AddReagent";
@@ -16,13 +16,15 @@ export type Reagent = {
   methodology_en?: string;
   packageSize: string;
 };
-export type SortType = "Methodology" | "A-Z" | "Category";
 export const card = " shadow-gray-400";
 export const input = "inset-shadow-gray-300";
 export const inner = "bg-white";
 export function ReagentsControl() {
   const { reagents, loading: dataloading } = useData();
+  const [searchvalue, setSearchValue] = useState("");
   const { lang } = useContent();
+  const [r, setR] = useState<Reagent[]>([]);
+  setR(reagents);
   const cats = useMemo(
     () => [
       ...new Set<string>(
@@ -33,6 +35,18 @@ export function ReagentsControl() {
     ],
     [reagents],
   );
+
+  const handleSearch = (query: string) => {
+    const lowerQuery = query.toLowerCase();
+
+    const results = reagents.filter(
+      (c) =>
+        c.name_en?.toLowerCase().includes(lowerQuery) ||
+        c.name_mn?.toLowerCase().includes(lowerQuery),
+    );
+
+    setR((prev) => prev.filter((e) => e === results));
+  };
 
   const methods: Methodology[] = useMemo(() => {
     const seen = new Set<string>();
@@ -56,8 +70,19 @@ export function ReagentsControl() {
           {lang === "EN" ? <>Reagents</> : <>Урвалж</>} ({reagents.length})
         </h2>
         <div className="flex items-center gap-2 ease-in-out duration-300">
-          <input placeholder="Search" className="p-2 rounded" />
-          <button className="p-2 aspect-square rounded-full shadow-sm hover:shadow-zinc-300">
+          <input
+            placeholder="Search"
+            className="p-2 rounded"
+            onChange={(e) => {
+              setSearchValue(e.target.value);
+            }}
+          />
+          <button
+            className="p-2 aspect-square rounded-full shadow-sm hover:shadow-zinc-300"
+            onClick={() => {
+              handleSearch(searchvalue);
+            }}
+          >
             <Search size={16} />
           </button>
           <AddReagent categoryId={cats as string[]} methodology={methods} />
@@ -70,14 +95,7 @@ export function ReagentsControl() {
         </div>
       ) : (
         <>
-          <div className="w-full flex items-end">
-            <button
-              onClick={() => {}}
-              className="flex gap-2 items-center justify-center text-sm ease-in-out duration-300 rounded-full p-2 aspect-square"
-            >
-              <Filter size={16} />
-            </button>
-          </div>
+          <div className="w-full flex items-end"></div>
           {reagents.length > 0 && (
             <div className={`${card}`}>
               <div
@@ -104,7 +122,7 @@ export function ReagentsControl() {
               </div>
               <div className="p-4 rounded shadow-md max-h-full overflow-y-scroll">
                 <div className="flex flex-col gap-2">
-                  {reagents.map((reagent, i) => (
+                  {r.map((reagent, i) => (
                     <ReagentsListItem key={i} prop={reagent} />
                   ))}
                 </div>

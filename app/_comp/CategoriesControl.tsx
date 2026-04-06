@@ -3,13 +3,31 @@ import { Trash2, Search, Filter } from "lucide-react";
 import AddCategory from "./AddCategory";
 import { useData } from "./context/DataProvider";
 import { useContent } from "./context/ContentProvider";
+import { useState } from "react";
 const card = " shadow-gray-400";
 export const inner = "bg-white";
 
 export function CategoriesControl() {
   const { categories, loading: dataloading, deleteCategory } = useData();
   const { lang } = useContent();
+  const [searchvalue, setSearchValue] = useState("");
+  const [candidates, setCandidates] = useState<string[]>([]);
+  const nameCand = () => {
+    const sc = categories.flatMap((c) => [c.title_en, c.title_mn]);
+    setCandidates((prev) => [...prev, ...sc]);
+  };
 
+  const handleSearch = (query: string) => {
+    const lowerQuery = query.toLowerCase();
+
+    const results = categories.filter(
+      (c) =>
+        c.title_en?.toLowerCase().includes(lowerQuery) ||
+        c.title_mn?.toLowerCase().includes(lowerQuery),
+    );
+
+    console.log(results);
+  };
   return (
     <div className="flex flex-col gap-4 w-full">
       <div className={`flex justify-between p-2`}>
@@ -18,8 +36,18 @@ export function CategoriesControl() {
           )
         </h2>
         <div className="flex items-center gap-2 ease-in-out duration-300">
-          <input placeholder="Search" className="p-2 rounded" />
-          <button className="p-2 aspect-square rounded-full shadow-sm hover:shadow-zinc-300">
+          <input
+            placeholder={lang === "EN" ? "Search" : "Хайх"}
+            className="p-2 rounded"
+            value={searchvalue}
+            onChange={(e) => setSearchValue(e.target.value)}
+          />
+          <button
+            className="p-2 aspect-square rounded-full shadow-sm hover:shadow-zinc-300"
+            onClick={() => {
+              handleSearch(searchvalue);
+            }}
+          >
             <Search size={16} />
           </button>
           <AddCategory />
@@ -32,14 +60,7 @@ export function CategoriesControl() {
         </div>
       ) : (
         <>
-          <div className="w-full flex items-end">
-            <button
-              onClick={() => {}}
-              className="flex gap-2 items-center justify-center text-sm ease-in-out duration-300 rounded-full p-2 aspect-square"
-            >
-              <Filter size={16} />
-            </button>
-          </div>
+          <div className="w-full flex items-end"></div>
           {categories.length > 0 && (
             <div className={`${card}`}>
               <div
@@ -52,7 +73,7 @@ export function CategoriesControl() {
                   {lang === "EN" ? <>Name</> : <>Нэр</>}
                 </div>
                 <div className="col-span-1">
-                  {lang === "EN" ? <>Type</> : <>Төрөл</>}
+                  {lang === "EN" ? <>Bullets</> : <>Дэд Сэдэв</>}
                 </div>
                 <div className="col-span-1 w-full h-full flex justify-end">
                   {lang === "EN" ? <>Actions</> : <>Үйлдэл</>}
@@ -72,7 +93,11 @@ export function CategoriesControl() {
                         <p> {cat.title_en}</p>
                         <p>{cat.title_mn}</p>
                       </div>
-                      <div className="col-span-1 text-sm opacity-60"></div>
+                      <div className="col-span-1 text-sm opacity-60 flex flex-col gap-2">
+                        {(lang === "MN" ? cat.bullets_mn : cat.bullets_en)?.map(
+                          (b) => <p key={b}>{b}</p>,
+                        ) ?? <>-:-</>}
+                      </div>
                       <div className="col-span-1 flex justify-end">
                         <button
                           onClick={() => deleteCategory(cat.id)}
