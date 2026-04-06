@@ -1,46 +1,21 @@
 "use client";
-import { useState, useEffect } from "react";
 import { Trash2, Search, Filter } from "lucide-react";
 import AddCategory from "./AddCategory";
-import { fetchWithAuth } from "@/lib/api";
-
-type Category = {
-  id: string;
-  title_en: string;
-  title_mn: string;
-  bullets_en: any[];
-  bullets_mn: any[];
-};
+import { useData } from "./context/DataProvider";
+import { useContent } from "./context/ContentProvider";
 const card = " shadow-gray-400";
 export const inner = "bg-white";
 
 export function CategoriesControl() {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [dataloading, setDataloading] = useState(false);
-
-  useEffect(() => {
-    setDataloading(true);
-    fetchWithAuth(`/categories`)
-      .then((r) => r.json())
-      .then((data) => setCategories(Array.isArray(data) ? data : []))
-      .catch(console.error)
-      .finally(() => setDataloading(false));
-  }, []);
-
-  const handleDelete = async (id: string) => {
-    try {
-      await fetchWithAuth(`/categories/${id}`, { method: "DELETE" });
-      setCategories((prev) => prev.filter((c) => c.id !== id));
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  const { categories, loading: dataloading, deleteCategory } = useData();
+  const { lang } = useContent();
 
   return (
     <div className="flex flex-col gap-4 w-full">
       <div className={`flex justify-between p-2`}>
         <h2 className="text-xl font-semibold p-3">
-          Categories ({categories.length})
+          {lang === "EN" ? <>Categories</> : <>Категори</>} ({categories.length}
+          )
         </h2>
         <div className="flex items-center gap-2 ease-in-out duration-300">
           <input placeholder="Search" className="p-2 rounded" />
@@ -53,7 +28,7 @@ export function CategoriesControl() {
 
       {dataloading ? (
         <div className="aspect-5/2 w-full flex items-center justify-center">
-          Loading
+          {lang === "EN" ? <>Loading...</> : <>Ачаалж байна...</>}
         </div>
       ) : (
         <>
@@ -70,11 +45,17 @@ export function CategoriesControl() {
               <div
                 className={`w-full px-8 grid grid-cols-4 p-2 font-semibold text-tg-blue-dark rounded z-99 shadow-sm shadow-zinc-300 ${inner}`}
               >
-                <div className="col-span-1">ID</div>
-                <div className="col-span-1">Name</div>
-                <div className="col-span-1">Type</div>
+                <div className="col-span-1">
+                  {lang === "EN" ? <>ID</> : <>ID</>}
+                </div>
+                <div className="col-span-1">
+                  {lang === "EN" ? <>Name</> : <>Нэр</>}
+                </div>
+                <div className="col-span-1">
+                  {lang === "EN" ? <>Type</> : <>Төрөл</>}
+                </div>
                 <div className="col-span-1 w-full h-full flex justify-end">
-                  Actions
+                  {lang === "EN" ? <>Actions</> : <>Үйлдэл</>}
                 </div>
               </div>
               <div className="p-4 rounded shadow-md h-full overflow-y-scroll">
@@ -94,7 +75,7 @@ export function CategoriesControl() {
                       <div className="col-span-1 text-sm opacity-60"></div>
                       <div className="col-span-1 flex justify-end">
                         <button
-                          onClick={() => handleDelete(cat.id)}
+                          onClick={() => deleteCategory(cat.id)}
                           className="p-1 rounded hover:bg-red-500 hover:text-white transition-colors duration-200"
                         >
                           <Trash2 size={16} />

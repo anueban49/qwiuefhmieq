@@ -1,36 +1,26 @@
 "use client";
-//unit item for list -> that expands to show detailed infos and such.
 import {
-  Filter,
   Trash2,
-  BadgeInfoIcon,
   Pen,
   ChevronRight,
   ChevronDown,
-  Globe2Icon,
   Image,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useData } from "./context/DataProvider";
+import { EditInstrumentDialog } from "./AddInstrument";
 export type Feature = { title: string; description: string };
 export type Spec = { parameter: string; value: string };
 import { Instrument } from "./InstrumentsControl";
-const card = "bg-tg-subgreen shadow-gray-400";
-const input = "inset-shadow-gray-300";
 const inner = "bg-white";
-const API = process.env.NEXT_PUBLIC_BASE_URL;
 export type LangType = "EN" | "MN";
 export const InstrumentListItem = ({ props }: { props: Instrument }) => {
+  const { deleteInstrument } = useData();
   const [lang, setLang] = useState("EN");
   const [expand, setExpand] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const switchLang = () => {
     setLang((prev) => (prev === "EN" ? "MN" : "EN"));
-  };
-  const handleDelete = async (id: string) => {
-    try {
-      await fetch(`${API}/instruments/${id}`, { method: "DELETE" });
-    } catch (e) {
-      console.error(e);
-    }
   };
   const toggleExpand = () => {
     setExpand((prev) => !prev);
@@ -42,7 +32,7 @@ export const InstrumentListItem = ({ props }: { props: Instrument }) => {
           <div className="col-span-1 flex items-center gap-3">
             <p className="font-medium text-sm">{props.id}</p>
           </div>
-          <div className="col-span-2 flex justify-center text-sm flex-col gap-2">
+          <div className="col-span-3 flex justify-center text-sm flex-col gap-2">
             <p>{props.name_en}</p>
             <p>{props.name_mn}</p>
           </div>
@@ -51,18 +41,15 @@ export const InstrumentListItem = ({ props }: { props: Instrument }) => {
               {props.categoryId}
             </p>
           </div>
-          <div className="col-span-1 flex items-center text-sm">
-            {props.methodTag}
-          </div>
 
           <div className="col-span-1 w-full flex justify-end items-center">
             <button
-              onClick={() => handleDelete(props.id)}
+              onClick={() => deleteInstrument(props.id)}
               className="p-1 rounded hover:bg-red-500 hover:text-white transition-colors duration-200"
             >
               <Trash2 size={16} />
             </button>
-            <button className="p-1 rounded hover:bg-cyan-500 hover:text-white transition-colors duration-200">
+            <button onClick={() => setEditOpen(true)} className="p-1 rounded hover:bg-cyan-500 hover:text-white transition-colors duration-200">
               <Pen size={16} />
             </button>
 
@@ -90,7 +77,7 @@ export const InstrumentListItem = ({ props }: { props: Instrument }) => {
               {props.imageData ? (
                 <>
                   <img
-                    src={props.imageData}
+                    src={`data:${props.imageData.type};base64,${btoa(String.fromCharCode(...props.imageData.data))}`}
                     alt={props.name_en}
                     className="rounded w-1/4 aspect-square bg-white shadow-xs shadow-tg-subgreen"
                   />
@@ -103,7 +90,7 @@ export const InstrumentListItem = ({ props }: { props: Instrument }) => {
               {/*  */}
               {lang === "EN" ? (
                 <>
-                  {" "}
+                  
                   <div className="w-3/8 flex flex-col text-sm rounded bg-white p-2 shadow-xs shadow-tg-subgreen ">
                     <p className="font-bold">Features</p>
                     {props?.features_en.map((f, i) => (
@@ -157,6 +144,7 @@ export const InstrumentListItem = ({ props }: { props: Instrument }) => {
           </>
         )}
       </div>
+      <EditInstrumentDialog open={editOpen} onClose={() => setEditOpen(false)} instrument={props} />
     </>
   );
 };

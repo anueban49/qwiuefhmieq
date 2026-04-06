@@ -1,0 +1,75 @@
+  {
+        "id": "a1860",
+        "categoryId": "immunoassay",
+        "name_en": "AutoLumo A1860",
+        "name_mn": "",
+        "description_en": "Advanced CLIA system with iconic consumable management.",
+        "description_mn": "",
+        "fullDescription_en": "AutoLumo A1860 is designed for laboratories needing reliable and fast immunoassay testing. It features automatic dual-substrate switching and auto-retesting to ensure accurate results without manual intervention.",
+        "fullDescription_mn": "",
+        "features_en": [
+            {
+                "title": "Automatic Substrate Switch",
+                "description": "Ensures continuous operation by automatically switching between dual substrates."
+            },
+            {
+                "title": "Auto-retesting",
+                "description": "Intelligence built-in to trigger retests based on predefined clinical criteria."
+            },
+            {
+                "title": "Consumable Management",
+                "description": "Iconic management system for RVs and other consumables to prevent downtime."
+            }
+        ],
+        "features_mn": [
+            {
+                "title": "",
+                "description": ""
+            },
+            {
+                "title": "",
+                "description": ""
+            },
+            {
+                "title": "",
+                "description": ""
+            }
+        ],
+        "specs_en": [
+            {
+                "parameter": "Throughput",
+                "value": "180 t/h"
+            },
+            {
+                "parameter": "Reagent Positions",
+                "value": "25"
+            },
+            {
+                "parameter": "Weight",
+                "value": "183 kg"
+            },
+            {
+                "parameter": "Interface",
+                "value": "Bidirectional LIS"
+            }
+        ],
+        "specs_mn": [
+            {
+                "parameter": "Хүчин чадал",
+                "value": ""
+            },
+            {
+                "parameter": "Урвалжийн байрлал",
+                "value": ""
+            },
+            {
+                "parameter": "Жин",
+                "value": ""
+            },
+            {
+                "parameter": "Интерфэйс",
+                "value": ""
+            }
+        ]
+    },
+    

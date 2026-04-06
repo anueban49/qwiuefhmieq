@@ -1,36 +1,38 @@
 "use client";
 import { ChevronRight, ShieldCog } from "lucide-react";
 import { useState } from "react";
-import { Shield } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { fetchWithAuth } from "./lib/api";
 export default function Page() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [btndisabled, setBtndisabled] = useState(true);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({
     username: "",
     password: "",
   });
   const handleClick = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("send payload:", form);
+    setLoading(true);
+    setError("");
     try {
-      setBtndisabled(true);
-      setLoading(true);
-      fetchWithAuth(`/auth/login`, {
+      const res = await fetchWithAuth(`/auth/login`, {
         method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
-      })
-        .then((r) => r.json())
-        .then((data) =>
-          localStorage.setItem("accessToken", data.access_token as any),
-        )
-        .catch(console.error)
-        .finally(() => setLoading(false));
+      });
+      if (!res.ok) {
+        setError("Invalid username or password");
+        return;
+      }
+      const data = await res.json();
+      localStorage.setItem("accessToken", data.access_token);
+      router.push("/main");
     } catch (e) {
       console.error(e);
+      setError("Network error. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -65,6 +67,9 @@ export default function Page() {
               type="password"
               onChange={(e) => setForm({ ...form, password: e.target.value })}
             />
+            {error && (
+              <p className="text-red-500 text-sm">{error}</p>
+            )}
             <button
               type="submit"
               disabled={loading}

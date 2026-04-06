@@ -7,11 +7,12 @@ import {
   useEffect,
 } from "react";
 import { useRouter } from "next/navigation";
-export type ActiveBtn = "Categories" | "Instruments" | "Regeants" | "Settings";
+export type ActiveBtn = "Categories" | "Instruments" | "Regeants" | "Messages";
+export type LangType = "EN" | "MN";
 interface ContentType {
   switchContent: (tab: ActiveBtn) => void;
-  active: "Categories" | "Instruments" | "Regeants" | "Settings";
-  lang: "EN" | "MN";
+  active: "Categories" | "Instruments" | "Regeants" | "Messages";
+  lang: LangType;
   switchLang: () => void;
 }
 export type UserType = {
@@ -22,17 +23,18 @@ export type UserType = {
 const ContentContext = createContext({} as ContentType);
 
 export const ContentProvider = ({ children }: { children: ReactNode }) => {
-  const router = useRouter();
   const [active, setActive] = useState<ActiveBtn>("Categories");
   const [lang, setLang] = useState<"EN" | "MN">("EN");
+  const router = useRouter();
   useEffect(() => {
     const getUser = async () => {
       try {
         const token = localStorage.getItem("accessToken");
         if (!token) {
           router.push("/");
+        } else {
+          router.push("/main");
         }
-        router.push("/main");
       } catch (e) {
         console.log("conten provider:", e);
       }
@@ -47,8 +49,7 @@ export const ContentProvider = ({ children }: { children: ReactNode }) => {
     getLang();
   }, []);
   const switchLang = () => {
-    setLang((prev) => (prev === "EN" ? "MN" : "EN"));
-    localStorage.setItem("lang", lang);
+    setLang((prev) => prev === "EN" ? "MN" : "EN");
   };
   const switchContent = (tab: ActiveBtn) => {
     setActive(tab);

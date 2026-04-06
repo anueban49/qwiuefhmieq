@@ -1,4 +1,4 @@
-const API = process.env.NEXT_PUBLIC_BASE_URL;
+
 
 export async function fetchWithAuth(
   endpoint: string,
@@ -6,7 +6,7 @@ export async function fetchWithAuth(
 ) {
   const token = localStorage.getItem("accessToken");
 
-  const res = await fetch(`${API}${endpoint}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}${endpoint}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",

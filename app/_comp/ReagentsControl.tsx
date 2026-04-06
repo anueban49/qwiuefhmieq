@@ -1,13 +1,11 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
 import { Search, Filter } from "lucide-react";
 import { ReagentsListItem } from "./ReagentsListItem";
 import AddReagent from "./AddReagent";
-import { fetchWithAuth } from "@/lib/api";
+import { useData } from "./context/DataProvider";
 import { Methodology } from "./AddReagent";
-const API = process.env.NEXT_PUBLIC_BASE_URL;
-console.log(API);
-
+import { useContent } from "./context/ContentProvider";
 export type Reagent = {
   catalogNo: string;
   id: string;
@@ -23,43 +21,39 @@ export const card = " shadow-gray-400";
 export const input = "inset-shadow-gray-300";
 export const inner = "bg-white";
 export function ReagentsControl() {
-  const [reagents, setReagents] = useState<Reagent[]>([]);
-  const [dataloading, setDataloading] = useState(false);
-  const [cats, setCats] = useState<string[]>([]);
-  const [methods, setMethods] = useState<Methodology[]>([]);
-  const [filter, setFilter] = useState("");
+  const { reagents, loading: dataloading } = useData();
+  const { lang } = useContent();
+  const cats = useMemo(
+    () => [
+      ...new Set<string>(
+        reagents
+          .map((d) => d.categoryId?.trim())
+          .filter((c): c is string => !!c),
+      ),
+    ],
+    [reagents],
+  );
 
-  useEffect(() => {
-    setDataloading(true);
-    fetchWithAuth(`/reagents`)
-      .then((r) => r.json())
-      .then((data) => {
-        setReagents(Array.isArray(data) ? data : []);
-        setCats([
-          ...new Set<string>(
-            data
-              .map((d: Reagent) => d.categoryId?.trim()) 
-              .filter((c: string): c is string => !!c),
-          ),
-        ]);
-        setMethods([
-          ...new Set<Methodology>(
-            data.map((d: Reagent) => ({
-              methodology_en: d.methodology_en,
-              methodology_mn: d.methodology_mn,
-            })),
-          ),
-        ]);
-      })
-      .catch(console.error)
-      .finally(() => setDataloading(false));
-  }, []);
+  const methods: Methodology[] = useMemo(() => {
+    const seen = new Set<string>();
+    return reagents.reduce<Methodology[]>((acc, d) => {
+      const key = `${d.methodology_en}|${d.methodology_mn}`;
+      if (!seen.has(key) && d.methodology_en) {
+        seen.add(key);
+        acc.push({
+          methodology_en: d.methodology_en,
+          methodology_mn: d.methodology_mn ?? "",
+        });
+      }
+      return acc;
+    }, []);
+  }, [reagents]);
 
   return (
     <div className="flex flex-col gap-4 w-full">
       <div className={`flex justify-between p-2`}>
         <h2 className="text-xl font-semibold p-3">
-          Reagents ({reagents.length})
+          {lang === "EN" ? <>Reagents</> : <>Урвалж</>} ({reagents.length})
         </h2>
         <div className="flex items-center gap-2 ease-in-out duration-300">
           <input placeholder="Search" className="p-2 rounded" />
@@ -72,7 +66,7 @@ export function ReagentsControl() {
 
       {dataloading ? (
         <div className="aspect-5/2 w-full flex items-center justify-center">
-          Loading
+          {lang === "EN" ? <>Loading...</> : <>Ачаалж байна...</>}
         </div>
       ) : (
         <>
@@ -89,16 +83,26 @@ export function ReagentsControl() {
               <div
                 className={`w-full px-8 grid grid-cols-13 p-2 font-semibold text-tg-blue-dark rounded text-bold z-99 shadow-sm shadow-zinc-300 ${inner}`}
               >
-                <div className="col-span-3">Name</div>
-                <div className="col-span-2">Category</div>
-                <div className="col-span-2">Catalog No.</div>
-                <div className="col-span-3">Methodology</div>
-                <div className="col-span-2">Package Size</div>
+                <div className="col-span-3">
+                  {lang === "EN" ? <>Name</> : <>Нэр</>}
+                </div>
+                <div className="col-span-2">
+                  {lang === "EN" ? <>Category</> : <>Категори</>}
+                </div>
+                <div className="col-span-2">
+                  {lang === "EN" ? <>Catalog No.</> : <>Каталог дугаар</>}
+                </div>
+                <div className="col-span-3">
+                  {lang === "EN" ? <>Methodology</> : <>Метолог</>}
+                </div>
+                <div className="col-span-2">
+                  {lang === "EN" ? <>Package Size</> : <>Савлагаа</>}
+                </div>
                 <div className="col-span-1 w-full h-full flex justify-end">
-                  Actions
+                  {lang === "EN" ? <>Actions</> : <>Категори</>}
                 </div>
               </div>
-              <div className="p-4 rounded shadow-md max-h-fulloverflow-y-scroll">
+              <div className="p-4 rounded shadow-md max-h-full overflow-y-scroll">
                 <div className="flex flex-col gap-2">
                   {reagents.map((reagent, i) => (
                     <ReagentsListItem key={i} prop={reagent} />

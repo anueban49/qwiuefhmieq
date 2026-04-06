@@ -3,10 +3,6 @@ import { fetchWithAuth } from "@/lib/api";
 import { Minus } from "lucide-react";
 import { useRef, useEffect, useState, ReactNode, MouseEvent } from "react";
 
-// ─────────────────────────────────────────────────────────────
-// Dialog Component
-// ─────────────────────────────────────────────────────────────
-
 interface DialogProps {
   open: boolean;
   onClose: () => void;
@@ -15,17 +11,22 @@ interface DialogProps {
 
 function Dialog({ open, onClose, children }: DialogProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+  useEffect(() => {
     const dialog = dialogRef.current;
-    if (!dialog) return;
+
+    if (!dialog || !mounted) return;
 
     if (open) {
       dialog.showModal();
     } else {
       dialog.close();
     }
-  }, [open]);
+  }, [open, mounted]);
 
   const handleBackdropClick = (e: MouseEvent<HTMLDialogElement>) => {
     if (e.target === dialogRef.current) {
@@ -40,6 +41,7 @@ function Dialog({ open, onClose, children }: DialogProps) {
 
   return (
     <dialog
+      suppressHydrationWarning
       ref={dialogRef}
       onClick={handleBackdropClick}
       onCancel={handleCancel as unknown as React.ReactEventHandler}
@@ -111,7 +113,6 @@ export function CategoryFormDialog({ open, onClose }: CategoryFormDialogProps) {
           </button>
         </div>
 
-        {/* Name */}
         <div>
           <label className="text-sm font-medium text-gray-700">Name</label>
           <input
@@ -125,7 +126,6 @@ export function CategoryFormDialog({ open, onClose }: CategoryFormDialogProps) {
           />
         </div>
 
-        {/* Type */}
         <div>
           <label className="text-sm font-medium text-gray-700">Type</label>
           <select
@@ -142,7 +142,6 @@ export function CategoryFormDialog({ open, onClose }: CategoryFormDialogProps) {
           </select>
         </div>
 
-        {/* Submit */}
         <button
           type="submit"
           disabled={loading}

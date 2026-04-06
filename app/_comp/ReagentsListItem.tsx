@@ -1,18 +1,15 @@
 "use client";
 import { Trash2, Pen } from "lucide-react";
+import { useState } from "react";
 import { Reagent } from "./ReagentsControl";
-import { fetchWithAuth } from "@/lib/api";
+import { useData } from "./context/DataProvider";
+import { EditReagentDialog } from "./AddReagent";
 export const card = " shadow-gray-400";
 export const input = "inset-shadow-gray-300";
 export const inner = "bg-white";
 export const ReagentsListItem = ({ prop }: { prop: Reagent }) => {
-  const handleDelete = async (id: string) => {
-    try {
-      await fetchWithAuth(`/reagents/${id}`, { method: "DELETE" });
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  const { deleteReagent } = useData();
+  const [editOpen, setEditOpen] = useState(false);
   return (
     <>
       <div key={prop.id} className={`grid grid-cols-13 p-2 rounded ${inner}`}>
@@ -30,17 +27,18 @@ export const ReagentsListItem = ({ prop }: { prop: Reagent }) => {
         <div className="w-full flex justify-end col-span-1">
           <div className="w-full h-full flex items-center justify-center">
             <button
-              onClick={() => handleDelete(prop.id)}
+              onClick={() => deleteReagent(prop.id)}
               className="p-1 rounded hover:bg-red-500 hover:text-white transition-colors duration-200"
             >
               <Trash2 size={16} />
             </button>
-            <button className="p-1 rounded hover:bg-red-500 hover:text-white transition-colors duration-200">
+            <button onClick={() => setEditOpen(true)} className="p-1 rounded hover:bg-cyan-500 hover:text-white transition-colors duration-200">
               <Pen size={16} />
             </button>
           </div>
         </div>
       </div>
+      <EditReagentDialog open={editOpen} onClose={() => setEditOpen(false)} reagent={prop} />
     </>
   );
 };
