@@ -23,8 +23,7 @@ export function ReagentsControl() {
   const { reagents, loading: dataloading } = useData();
   const [searchvalue, setSearchValue] = useState("");
   const { lang } = useContent();
-  const [r, setR] = useState<Reagent[]>([]);
-  setR(reagents);
+
   const cats = useMemo(
     () => [
       ...new Set<string>(
@@ -36,17 +35,19 @@ export function ReagentsControl() {
     [reagents],
   );
 
-  const handleSearch = (query: string) => {
-    const lowerQuery = query.toLowerCase();
-
-    const results = reagents.filter(
+  const filteredReagents = useMemo(() => {
+    const lowerQuery = searchvalue.trim().toLowerCase();
+    if (!lowerQuery) return reagents;
+    return reagents.filter(
       (c) =>
         c.name_en?.toLowerCase().includes(lowerQuery) ||
-        c.name_mn?.toLowerCase().includes(lowerQuery),
+        c.name_mn?.toLowerCase().includes(lowerQuery) ||
+        c.methodology_en?.toLowerCase().includes(lowerQuery) ||
+        c.methodology_mn?.toLowerCase().includes(lowerQuery) ||
+        c.id?.toLowerCase().includes(lowerQuery) ||
+        c.categoryId.toLowerCase().includes(lowerQuery),
     );
-
-    setR((prev) => prev.filter((e) => e === results));
-  };
+  }, [reagents, searchvalue]);
 
   const methods: Methodology[] = useMemo(() => {
     const seen = new Set<string>();
@@ -73,18 +74,12 @@ export function ReagentsControl() {
           <input
             placeholder="Search"
             className="p-2 rounded"
+            value={searchvalue}
             onChange={(e) => {
               setSearchValue(e.target.value);
             }}
           />
-          <button
-            className="p-2 aspect-square rounded-full shadow-sm hover:shadow-zinc-300"
-            onClick={() => {
-              handleSearch(searchvalue);
-            }}
-          >
-            <Search size={16} />
-          </button>
+
           <AddReagent categoryId={cats as string[]} methodology={methods} />
         </div>
       </div>
@@ -122,7 +117,7 @@ export function ReagentsControl() {
               </div>
               <div className="p-4 rounded shadow-md max-h-full overflow-y-scroll">
                 <div className="flex flex-col gap-2">
-                  {r.map((reagent, i) => (
+                  {filteredReagents.map((reagent: Reagent, i: number) => (
                     <ReagentsListItem key={i} prop={reagent} />
                   ))}
                 </div>

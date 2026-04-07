@@ -4,13 +4,27 @@ import { InstrumentListItem } from "./InstrumentListItem";
 import AddInstrument from "./AddInstrument";
 import { useData } from "./context/DataProvider";
 import { useContent } from "./context/ContentProvider";
-
+import { useMemo, useState } from "react";
 export const InstrumentsControl = () => {
   const { instruments, loading: dataloading } = useData();
   const { lang } = useContent();
+  const [searchValue, setSearchValue] = useState("");
   const card = "shadow-gray-300";
   const inner = "bg-white";
 
+  const filteredInstruments = useMemo(() => {
+    const lowerQuery = searchValue.trim().toLowerCase();
+    if (!lowerQuery) {
+      return instruments;
+    }
+    return instruments.filter(
+      (i) =>
+        i.name_en?.toLowerCase().includes(lowerQuery) ||
+        i.name_mn?.toLowerCase().includes(lowerQuery) ||
+        i.id?.toLowerCase().includes(lowerQuery) ||
+        i.categoryId?.toLowerCase().includes(lowerQuery),
+    );
+  }, [instruments, searchValue]);
   return (
     <div className="flex flex-col gap-4 w-full">
       <div className={`flex justify-between p-2`}>
@@ -19,10 +33,14 @@ export const InstrumentsControl = () => {
           {instruments.length})
         </h2>
         <div className="flex items-center gap-2 ease-in-out duration-300">
-          <input placeholder="Search" className="p-2 rounded" />
-          <button className="p-2 aspect-square rounded-full shadow-sm hover:shadow-zinc-300">
-            <Search size={16} />
-          </button>
+          <input
+            placeholder="Search"
+            className="p-2 rounded"
+            onChange={(e) => {
+              setSearchValue(e.target.value);
+            }}
+          />
+
           <AddInstrument />
         </div>
       </div>
@@ -57,7 +75,7 @@ export const InstrumentsControl = () => {
               </div>
               <div className="p-4 rounded shadow-md max-h-full overflow-y-scroll">
                 <div className="flex flex-col gap-2">
-                  {instruments.map((inst, i) => (
+                  {filteredInstruments.map((inst, i) => (
                     <InstrumentListItem props={inst} key={i} />
                   ))}
                 </div>

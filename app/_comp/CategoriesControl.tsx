@@ -3,7 +3,7 @@ import { Trash2, Search, Filter } from "lucide-react";
 import AddCategory from "./AddCategory";
 import { useData } from "./context/DataProvider";
 import { useContent } from "./context/ContentProvider";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 const card = " shadow-gray-400";
 export const inner = "bg-white";
 
@@ -11,23 +11,19 @@ export function CategoriesControl() {
   const { categories, loading: dataloading, deleteCategory } = useData();
   const { lang } = useContent();
   const [searchvalue, setSearchValue] = useState("");
-  const [candidates, setCandidates] = useState<string[]>([]);
-  const nameCand = () => {
-    const sc = categories.flatMap((c) => [c.title_en, c.title_mn]);
-    setCandidates((prev) => [...prev, ...sc]);
-  };
 
-  const handleSearch = (query: string) => {
-    const lowerQuery = query.toLowerCase();
-
-    const results = categories.filter(
+  const filtered = useMemo(() => {
+    const lowerQuery = searchvalue.trim().toLowerCase();
+    if (!lowerQuery) {
+      return categories;
+    }
+    return categories.filter(
       (c) =>
-        c.title_en?.toLowerCase().includes(lowerQuery) ||
-        c.title_mn?.toLowerCase().includes(lowerQuery),
+        c.title_en.toLowerCase().includes(lowerQuery) ||
+        c.title_mn.toLowerCase().includes(lowerQuery) ||
+        c.id.toLowerCase().includes(lowerQuery),
     );
-
-    console.log(results);
-  };
+  }, [searchvalue, categories]);
   return (
     <div className="flex flex-col gap-4 w-full">
       <div className={`flex justify-between p-2`}>
@@ -42,14 +38,7 @@ export function CategoriesControl() {
             value={searchvalue}
             onChange={(e) => setSearchValue(e.target.value)}
           />
-          <button
-            className="p-2 aspect-square rounded-full shadow-sm hover:shadow-zinc-300"
-            onClick={() => {
-              handleSearch(searchvalue);
-            }}
-          >
-            <Search size={16} />
-          </button>
+
           <AddCategory />
         </div>
       </div>
@@ -61,7 +50,7 @@ export function CategoriesControl() {
       ) : (
         <>
           <div className="w-full flex items-end"></div>
-          {categories.length > 0 && (
+          {filtered.length > 0 && (
             <div className={`${card}`}>
               <div
                 className={`w-full px-8 grid grid-cols-4 p-2 font-semibold text-tg-blue-dark rounded z-99 shadow-sm shadow-zinc-300 ${inner}`}
@@ -81,7 +70,7 @@ export function CategoriesControl() {
               </div>
               <div className="p-4 rounded shadow-md h-full overflow-y-scroll">
                 <div className="flex flex-col gap-2">
-                  {categories.map((cat) => (
+                  {filtered.map((cat) => (
                     <div
                       key={cat.id}
                       className={`w-full px-8 grid grid-cols-4 p-2 rounded items-center ${inner}`}
