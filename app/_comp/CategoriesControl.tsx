@@ -1,5 +1,5 @@
 "use client";
-import { Trash2, Search, Filter } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import AddCategory from "./AddCategory";
 import { useData } from "./context/DataProvider";
 import { useContent } from "./context/ContentProvider";

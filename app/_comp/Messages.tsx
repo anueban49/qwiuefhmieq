@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useData, Contact } from "./context/DataProvider";
 import { useContent } from "./context/ContentProvider";
-import { Clipboard, ClipboardCheckIcon, Copy, Trash2 } from "lucide-react";
+import {  Copy, Trash2 } from "lucide-react";
 import { fetchWithAuth } from "@/lib/api";
 export const Messages = () => {
   const { messages } = useData();

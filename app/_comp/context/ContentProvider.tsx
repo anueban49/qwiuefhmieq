@@ -31,7 +31,7 @@ export const ContentProvider = ({ children }: { children: ReactNode }) => {
       try {
         const token = localStorage.getItem("accessToken");
         if (!token) {
-          router.push("/");
+          alert("sign in to access to sysyem")
         } else {
           router.push("/main");
         }
